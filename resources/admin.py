@@ -54,9 +54,6 @@ class Resource(Resource):
 class Resourcespresent(Resource):
     @jwt_required
     def get(self):
-        parser=reqparse.RequestParser()
-        parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
-        data= parser.parse_args()
         try:
             return query(f"""Select * from resources"""), 200
         except:
