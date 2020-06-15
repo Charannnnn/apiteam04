@@ -55,7 +55,7 @@ class Resourcespresent(Resource):
         except:
             return {"message": "There was an error connecting to the resource table"}, 500
 
-class AddResource(Resource):
+class AddExtraResource(Resource):
     parser=reqparse.RequestParser()
     parser.add_argument('id',type=int,required=True,help="ID cannot be blank.")
     parser.add_argument('name',type=str,required=True,help="Name cannot be blank.")
@@ -70,6 +70,33 @@ class AddResource(Resource):
                 query(f"""INSERT into resource values({data["id"]}, {data["name"]}, {data["count"]});""")
         except:
             return {"message": "Coudnt add resource"}, 401
+
+class AddReturnedResource(Resource):
+    parser=reqparse.RequestParser()
+    parser.add_argument('id',type=int,required=True,help="ID cannot be blank.")
+    parser.add_argument('name',type=str,required=True,help="Name cannot be blank.")
+    parser.add_argument('count',type=int,required=True,help="Count cannot be blank")
+    def post(self):
+        data=self.parser.parse_args()
+        c= GetCountById(data['id'])
+        r=GetResourceById(data['id'])
+        if r:
+            query(f"""UPDATE resource SET resources_available = resources_avaliable+1 WHERE resource_id= {data["id"]} ;""")
+            #How to update status here?
+
+class DecrementIssuedResource(Resource):
+    parser=reqparse.RequestParser()
+    parser.add_argument('id',type=int,required=True,help="ID cannot be blank.")
+    parser.add_argument('name',type=str,required=True,help="Name cannot be blank.")
+    parser.add_argument('count',type=int,required=True,help="Count cannot be blank")
+    parser.add_argument('resource_available',type=int,required=True,help="Resources Available cannot be blank")
+    def post(self):
+        data=self.parser.parse_args()
+        r=GetResourceById(data['id'])
+        if r:
+            query(f"""UPDATE resource SET resources_available = resources_avaliable-1 WHERE resource_id= {data["id"]} ;""")
+            #How to update status here?
+
 
 class DeleteResource(Resource):
     parser=reqparse.RequestParser()
@@ -88,7 +115,7 @@ class DeleteResource(Resource):
             return {"message": "Coudnt delete resource"}, 500
 
 
-class AddUser(Resource):
+class ChangeStatus(Resource):
     parser=reqparse.RequestParser()
     parser.add_argument('user_id',type=int,required=True,help="ID cannot be blank.")
     parser.add_argument('r_id',type=str,required=True,help="Name cannot be blank.")
@@ -96,6 +123,7 @@ class AddUser(Resource):
     parser.add_argument('reservation_time',type=int,required=True,help="Count cannot be blank")
     parser.add_argument('booking_time',type=int,required=True,help="Count cannot be blank")
     parser.add_argument('return_time',type=int,required=True,help="Count cannot be blank")
+    parser.add_argument('status',type=int,required=True,help="status cannot be blank.")
     def post(self):
         data=self.parser.parse_args()
         user= User.getUserById(data['user_id'])
@@ -106,6 +134,9 @@ class AddUser(Resource):
                 {data['reservation_time']}, {data['booking_time']}, {data['return_time']});""")
         except:
             return {"message": "Coudnt add user"}, 500'''
+
+
+
 
     
 
