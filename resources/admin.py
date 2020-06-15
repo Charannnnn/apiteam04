@@ -8,6 +8,12 @@ class Admin(Resource):
         self.id=id
         self.name=name
         self.password=password
+    
+    @classmethod
+    def getAdminById(cls,id):
+        result=query(f"""SELECT id,name,password FROM admin WHERE admin_id={id}""",return_json=False)
+        if len(result)>0: return User(result[0]['admin_id'],result[0]['name'],result[0]['password'])
+        return None
 
 
 class AdminLogin(Resource):
@@ -138,12 +144,7 @@ class GetResource(Resource):
         try:
             return query(f"""Select * from resources where resource_id={data["id"]};""")
         except:
-<<<<<<< HEAD
-            return {"message": "Coudnt add user"}, 500
-
-=======
             return {"message": "There was an error connecting to user table"}, 200
->>>>>>> dbd2951549fbdfb8ead8de6201b292d17994b00a
 
 
 

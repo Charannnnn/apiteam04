@@ -6,9 +6,10 @@ from flask_jwt_extended import JWTManager
 from resources.user import Users,UserLogin,User,UserRegister
 from resources.user_cancel import cancelBooking
 
+from resources.admin import *
 
 from resources.user_booking import User_Bookings_log
-
+from resources.resource import resourceDetails
 
 app= Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS']=True
@@ -44,6 +45,7 @@ api.add_resource(DeleteResource, '/DeleteResource')
 api.add_resource(User_Bookings_log,'/Bookings_log')
 api.add_resource(GetResource, '/getResource')
 api.add_resource(cancelBooking,'/cancelBooking')
+api.add_resource(resourceDetails,'/resourceDetails')
 
 @app.route('/')
 def home():
