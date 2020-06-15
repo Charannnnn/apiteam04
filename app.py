@@ -4,8 +4,9 @@ from flask_restful import Api
 import logging
 from flask_jwt_extended import JWTManager
 from resources.user import Users,UserLogin,User,UserRegister
+from resources.user_cancel import cancelBooking
 
-from resources.admin import *
+#from resources.admin import *
 
 from resources.user_booking import User_Bookings_log
 
@@ -35,11 +36,12 @@ def invalid_token_callback(error):
 api.add_resource(Users,'/users')
 api.add_resource(UserRegister,'/register')
 api.add_resource(UserLogin,'/login')
-api.add_resource(AdminLogin, '/adminlogin')
+'''api.add_resource(AdminLogin, '/AdminLogin')
 api.add_resource(Resourcespresent, '/resourcespresent')
 api.add_resource(AddResource, '/addresource')
-api.add_resource(DeleteResource, '/deleteresource')
+api.add_resource(DeleteResource, '/deleteresource')'''
 api.add_resource(User_Bookings_log,'/Bookings_log')
+api.add_resource(cancelBooking,'/cancelBooking')
 
 @app.route('/')
 def home():
