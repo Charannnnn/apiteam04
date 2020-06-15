@@ -4,6 +4,7 @@ from flask_restful import Api
 import logging
 from flask_jwt_extended import JWTManager
 from resources.user import Users,UserLogin,User,UserRegister
+from resources.user_cancel import cancelBooking
 
 from resources.admin import *
 
@@ -43,6 +44,7 @@ api.add_resource(AddReturnedResource, '/AddReturnedResource')
 api.add_resource(DeleteResource, '/DeleteResource')
 api.add_resource(User_Bookings_log,'/Bookings_log')
 api.add_resource(GetResource, '/getResource')
+api.add_resource(cancelBooking,'/cancelBooking')
 
 @app.route('/')
 def home():
