@@ -56,5 +56,19 @@ class Users(Resource):
         try:
             return query(f"""Select * from students where id={data["id"]}""")
         except:
-            return {"message": "There was an error connecting to user table"}, 500
+            return {"message": "There was an error connecting to user table"}, 200
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+
 
