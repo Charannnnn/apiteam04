@@ -9,7 +9,7 @@ from resources.user_cancel import cancelBooking
 from resources.admin import *
 
 from resources.user_booking import User_Bookings_log
-from resources.resource import resourceDetails
+from resources.resource import resourceDetails,incrementResourcesByValue,incrementResourcesByone,decrementResourcesByone,decrementResourcesByValue,issueResource,acceptReturnedResource
 
 app= Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS']=True
@@ -43,10 +43,14 @@ api.add_resource(DecrementIssuedResource, '/DecrementIssuedResource')
 api.add_resource(AddReturnedResource, '/AddReturnedResource')
 api.add_resource(DeleteResource, '/DeleteResource')
 api.add_resource(User_Bookings_log,'/Bookings_log')
-api.add_resource(GetResource, '/getResource')
 api.add_resource(cancelBooking,'/cancelBooking')
 api.add_resource(resourceDetails,'/resourceDetails')
-
+api.add_resource(incrementResourcesByone,'/incrementByOne')
+api.add_resource(incrementResourcesByValue,'/incrementByValue')
+api.add_resource(decrementResourcesByone,'/decrementByOne')
+api.add_resource(decrementResourcesByValue,'/decrementByValue')
+api.add_resource(issueResource,'/issueResource')
+api.add_resource(acceptReturnedResource,'/acceptResource')
 @app.route('/')
 def home():
     return('Hello')

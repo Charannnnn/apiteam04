@@ -12,7 +12,7 @@ class Admin(Resource):
     @classmethod
     def getAdminById(cls,id):
         result=query(f"""SELECT id,name,password FROM admin WHERE admin_id={id}""",return_json=False)
-        if len(result)>0: return User(result[0]['admin_id'],result[0]['name'],result[0]['password'])
+        if len(result)>0: return Admin(result[0]['admin_id'],result[0]['name'],result[0]['password'])
         return None
 
 
@@ -23,13 +23,13 @@ class AdminLogin(Resource):
     parser.add_argument('password',type=str,required=True,help="Password cannot be blank.")
     def post(self):
         data=self.parser.parse_args()
-        admin=Admin.getUserById(data['id'])
+        admin=Admin.getAdminById(data['id'])
         if admin and safe_str_cmp(admin.password,data['password']) and safe_str_cmp(admin.name, data['name']):
             access_token=create_access_token(identity=admin.id,expires_delta=False)
             return {'access_token':access_token},200
         return {"message":"Invalid Credentials!"}, 401
 
-class Resource(Resource):
+'''class resource_(Resource):
     def __init__(self, id, name, count, resources_available):
         self.id=id
         self.name=name
@@ -48,17 +48,15 @@ class Resource(Resource):
         result=query(f"""SELECT resource_id,resource_name, count WHERE resource_id='{id}'""",return_json=False)
         if len(result)>0:
             return Resource(result[0]['count'])
-        return 0
+        return 0'''
 
 
 class Resourcespresent(Resource):
     @jwt_required
     def get(self):
-        parser=reqparse.RequestParser()
-        parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
-        data= parser.parse_args()
         try:
-            return query(f"""Select * from resources"""), 200
+            return query(f"""Select * from resources""")
+            #return jsonify(k)
         except:
             return {"message": "There was an error connecting to the resource table"}, 500
 
