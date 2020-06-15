@@ -1,4 +1,4 @@
-'''from flask_restful import Resource,reqparse
+from flask_restful import Resource,reqparse
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
 from db import query
@@ -133,7 +133,7 @@ class ChangeStatus(Resource):
                 query(f"""INSERT INTO booking values({data['user_id']}, {data['r_id']}, {data['day']}, 
                 {data['reservation_time']}, {data['booking_time']}, {data['return_time']});""")
         except:
-            return {"message": "Coudnt add user"}, 500'''
+            return {"message": "Coudnt add user"}, 500
 
 
 
