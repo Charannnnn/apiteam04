@@ -132,22 +132,6 @@ class DeleteResource(Resource):
 
 
 
-class GetResource(Resource):
-    # @jwt_required
-    def get(self):
-        parser=reqparse.RequestParser()
-        parser.add_argument('id', type=int, required=True, help='resource_id Cannot be blank')
-        parser.add_argument('name', type=str)
-        parser.add_argument('count', type=int)
-        parser.add_argument('resources_available', type=int)
-        data= parser.parse_args()
-        try:
-            return query(f"""Select * from resources where resource_id={data["id"]};""")
-        except:
-            return {"message": "There was an error connecting to user table"}, 200
-
-
-
     
 
 
