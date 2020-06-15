@@ -43,7 +43,7 @@ api.add_resource(DecrementIssuedResource, '/DecrementIssuedResource')
 api.add_resource(AddReturnedResource, '/AddReturnedResource')
 api.add_resource(DeleteResource, '/DeleteResource')
 api.add_resource(User_Bookings_log,'/Bookings_log')
-api.add_resource(GetResource, '/getResource')
+#api.add_resource(GetResource, '/getResource')
 api.add_resource(cancelBooking,'/cancelBooking')
 api.add_resource(resourceDetails,'/resourceDetails')
 
