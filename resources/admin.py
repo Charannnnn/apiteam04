@@ -24,10 +24,11 @@ class AdminLogin(Resource):
         return {"message":"Invalid Credentials!"}, 401
 
 class Resource(Resource):
-    def __init__(self, id, name, count):
+    def __init__(self, id, name, count, resources_available):
         self.id=id
         self.name=name
         self.count=count
+        self.resources_available=resources_available
 
     @classmethod
     def getResourceById(cls,id):
@@ -37,11 +38,11 @@ class Resource(Resource):
         return None
 
     @classmethod
-    def getCountById(cls, id);
-    result=query(f"""SELECT resource_id,resource_name, count WHERE resource_id='{id}'""",return_json=False)
-    if len(result)>0: 
-        return Resource(result[0]['count'])
-    return 0
+    def getCountById(cls, id):
+        result=query(f"""SELECT resource_id,resource_name, count WHERE resource_id='{id}'""",return_json=False)
+        if len(result)>0:
+            return Resource(result[0]['count'])
+        return 0
 
 
 class Resourcespresent(Resource):
@@ -80,9 +81,12 @@ class AddReturnedResource(Resource):
         data=self.parser.parse_args()
         c= GetCountById(data['id'])
         r=GetResourceById(data['id'])
-        if r:
-            query(f"""UPDATE resource SET resources_available = resources_avaliable+1 WHERE resource_id= {data["id"]} ;""")
-            #How to update status here?
+        try:
+            if r:
+                query(f"""UPDATE resource SET resources_available = resources_avaliable+1 WHERE resource_id= {data["id"]} ;""")
+
+        except:
+            return {"message": "Coudnt get resource"}, 401
 
 class DecrementIssuedResource(Resource):
     parser=reqparse.RequestParser()
@@ -93,9 +97,14 @@ class DecrementIssuedResource(Resource):
     def post(self):
         data=self.parser.parse_args()
         r=GetResourceById(data['id'])
-        if r:
-            query(f"""UPDATE resource SET resources_available = resources_avaliable-1 WHERE resource_id= {data["id"]} ;""")
-            #How to update status here?
+        try:
+            if r:
+                query(f"""UPDATE resource SET resources_available = resources_avaliable-1 WHERE resource_id= {data["id"]} ;""")
+                # query(f"""UPDATE booking SET status = 1 WHERE r_id= {data["id"]} ;""")
+        except:
+            return {"message": "Coudnt issue resource"}, 401
+
+        
 
 
 class DeleteResource(Resource):
@@ -115,26 +124,21 @@ class DeleteResource(Resource):
             return {"message": "Coudnt delete resource"}, 500
 
 
-class ChangeStatus(Resource):
-    parser=reqparse.RequestParser()
-    parser.add_argument('user_id',type=int,required=True,help="ID cannot be blank.")
-    parser.add_argument('r_id',type=str,required=True,help="Name cannot be blank.")
-    parser.add_argument('day',type=int,required=True,help="Count cannot be blank")
-    parser.add_argument('reservation_time',type=int,required=True,help="Count cannot be blank")
-    parser.add_argument('booking_time',type=int,required=True,help="Count cannot be blank")
-    parser.add_argument('return_time',type=int,required=True,help="Count cannot be blank")
-    parser.add_argument('status',type=int,required=True,help="status cannot be blank.")
-    def post(self):
-        data=self.parser.parse_args()
-        user= User.getUserById(data['user_id'])
-        count= Resource.getCountById(data['r_id'])
-        try:
-            if user!=None and count:
-                query(f"""INSERT INTO booking values({data['user_id']}, {data['r_id']}, {data['day']}, 
-                {data['reservation_time']}, {data['booking_time']}, {data['return_time']});""")
-        except:
-            return {"message": "Coudnt add user"}, 500
 
+
+class GetResource(Resource):
+    # @jwt_required
+    def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('id', type=int, required=True, help='resource_id Cannot be blank')
+        parser.add_argument('name', type=str)
+        parser.add_argument('count', type=int)
+        parser.add_argument('resources_available', type=int)
+        data= parser.parse_args()
+        try:
+            return query(f"""Select * from resources where resource_id={data["id"]};""")
+        except:
+            return {"message": "There was an error connecting to user table"}, 200
 
 
 
