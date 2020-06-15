@@ -14,14 +14,14 @@ class cancelBooking(Resource):
         data= parser.parse_args()
         result={}
         try:
-            log1=query(f"""Select * from booking 
-                                where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0""",return_json=False)
+            log1=query(f"""Select * from booking where user_id={data["id"]} and  date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0""",return_json=False)
             
             if(len(log1)==0):
                 return {"message": "Can't Cancel your booking request"}, 500
             else:
+                query(f"""DELETE from booking where user_id={data["id"]} and  date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0""")
                 result["1"]=log1
                 result["message"]="Your booking has been canceled !!"
-            return jsonify(result)
+                return jsonify(result)
         except:
             return {"message": "Cannot connect to the bookings table"}, 500
