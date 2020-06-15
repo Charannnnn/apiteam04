@@ -4,7 +4,11 @@ from flask_restful import Api
 import logging
 from flask_jwt_extended import JWTManager
 from resources.user import Users,UserLogin,User,UserRegister
+<<<<<<< HEAD
 from resources.admin import Admin, AdminLogin
+=======
+from resources.user_booking import User_Bookings_log
+>>>>>>> a2ed7c87a5729185a827bf2b479b96aef2dba99f
 
 app= Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS']=True
@@ -31,8 +35,12 @@ def invalid_token_callback(error):
 api.add_resource(Users,'/users')
 api.add_resource(UserRegister,'/register')
 api.add_resource(UserLogin,'/login')
+<<<<<<< HEAD
 api.add_resource(AdminLogin, '/adminlogin')
 
+=======
+api.add_resource(User_Bookings_log,'/Bookings_log')
+>>>>>>> a2ed7c87a5729185a827bf2b479b96aef2dba99f
 
 @app.route('/')
 def home():

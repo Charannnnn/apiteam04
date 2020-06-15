@@ -108,7 +108,6 @@ class AddUser(Resource):
             return {"message": "Coudnt add user"}, 500
 
     
-class FineUpdate(Resource):
 
 
 
