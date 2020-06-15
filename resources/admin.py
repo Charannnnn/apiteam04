@@ -29,7 +29,7 @@ class AdminLogin(Resource):
             return {'access_token':access_token},200
         return {"message":"Invalid Credentials!"}, 401
 
-class Resource(Resource):
+'''class Resource(Resource):
     def __init__(self, id, name, count, resources_available):
         self.id=id
         self.name=name
@@ -48,7 +48,7 @@ class Resource(Resource):
         result=query(f"""SELECT resource_id,resource_name, count WHERE resource_id='{id}'""",return_json=False)
         if len(result)>0:
             return Resource(result[0]['count'])
-        return 0
+        return 0'''
 
 
 class Resourcespresent(Resource):
