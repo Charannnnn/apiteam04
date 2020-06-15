@@ -55,7 +55,7 @@ class Resourcespresent(Resource):
     @jwt_required
     def get(self):
         try:
-            return query(f"""Select * from resources"""), 200
+            return query(f"""Select * from resources""")
         except:
             return {"message": "There was an error connecting to the resource table"}, 500
 
