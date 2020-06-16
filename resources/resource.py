@@ -25,7 +25,7 @@ class incrementResourcesByValue(Resource):
         parser.add_argument('c', type=int, required=True, help='count Cannot be blank')
         data= parser.parse_args()
         try:
-            query(f"""UPDATE resources  SET count=count+{data["c"]} and resources_available=resources_available+{data["c"]} where resource_id={data["id"]}""")
+            query(f"""UPDATE resources  SET count=count+{data["c"]} and resources_available=resources_available+{data["c"]} where resource_id={data["id"]} """)
             return {"message":"changes are made to resources table","count":data["c"]}, 200
         except:
             return {"message": "There was an error connecting to resources table"}, 500
@@ -93,7 +93,7 @@ class acceptReturnedResource(Resource):
         parser.add_argument('id', type=str, required=True, help='student_id Cannot be blank')
         parser.add_argument('return_time', type=str, required=True, help='return_time Cannot be blank')
         data= parser.parse_args()
-        query(f"""UPDATE booking  SET return_time={data["return_time"]} where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=1 """)
+        query(f"""UPDATE booking  SET return_time={data["return_time"]} where user_id={data["id"]} and (date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")) and status=1 """)
         result=query(f"""select r_id from booking where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
         data["resc_id"]=result[0]["r_id"]
         query(f"""UPDATE resources  SET resources_available=resources_available+1 where resource_id={data["resc_id"]}""")
@@ -102,7 +102,6 @@ class acceptReturnedResource(Resource):
             query(f"""UPDATE students  SET fine=50 where id={data["id"]}""")
             return {"message":"Fine has been added"},200
         else:
-            return {"message": "updated available resources"}, 200'''
+            return {"message": "updated available resources"}, 200
         return {"m":"ok"},200
-        return {"message": "There was an error connecting to resources table"}, 500
-
+        #return {"message": "There was an error connecting to resources table"}, 500
