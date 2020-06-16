@@ -3,7 +3,7 @@ import pymysql
 from flask_restful import Api
 import logging
 from flask_jwt_extended import JWTManager
-from resources.user import Users,UserLogin,User,UserRegister
+from resources.user import *
 from resources.user_cancel import cancelBooking
 from resources.admin import *
 from resources.user_booking import *
@@ -54,7 +54,7 @@ api.add_resource(issuedBookings,'/issuedBookings')
 api.add_resource(blockedUsers,'/blockedUsers')
 api.add_resource(unblockUser,'/unblockUser')
 api.add_resource(blockUser,'/blockUser')
-
+api.add_resource(bookResource,'/bookResource')
 
 @app.route('/')
 def home():
