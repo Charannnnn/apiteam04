@@ -86,14 +86,14 @@ class issueResource(Resource):
         except:
             return {"message": "There was an error connecting to booking table"}, 500
 
-class acceptReturnedResource(Resource):
+'''class acceptReturnedResource(Resource):
     @jwt_required
     def get(self):
         parser=reqparse.RequestParser()
         parser.add_argument('id', type=str, required=True, help='student_id Cannot be blank')
         parser.add_argument('return_time', type=str, required=True, help='return_time Cannot be blank')
         data= parser.parse_args()
-        query(f"""UPDATE booking  SET return_time={data["return_time"]} where user_id={data["id"]} and (date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")) and status=1 """)
+        query(f"""UPDATE booking  SET return_time=time_format({data["return_time"]},"%H %i %s") where user_id={data["id"]} and (date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")) and status=1 """)
         result=query(f"""select r_id from booking where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
         data["resc_id"]=result[0]["r_id"]
         query(f"""UPDATE resources  SET resources_available=resources_available+1 where resource_id={data["resc_id"]}""")
@@ -103,5 +103,5 @@ class acceptReturnedResource(Resource):
             return {"message":"Fine has been added"},200
         else:
             return {"message": "updated available resources"}, 200
-        return {"m":"ok"},200
+        return {"m":"ok"},200'''
         #return {"message": "There was an error connecting to resources table"}, 500

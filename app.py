@@ -6,7 +6,7 @@ from flask_jwt_extended import JWTManager
 from resources.user import Users,UserLogin,User,UserRegister
 from resources.user_cancel import cancelBooking
 from resources.admin import *
-from resources.user_booking import User_Bookings_log
+from resources.user_booking import *
 from resources.resource import *
 from resources.booking_log import *
 
@@ -40,6 +40,7 @@ api.add_resource(Resourcespresent, '/ResourcesPresent')
 api.add_resource(AddExtraResource, '/AddExtraResource')
 api.add_resource(DeleteResource, '/DeleteResource')
 api.add_resource(User_Bookings_log,'/userBookingslog')
+api.add_resource(UserBookingFine,'/userDue')
 api.add_resource(cancelBooking,'/cancelBooking')
 api.add_resource(resourceDetails,'/resourceDetails')
 api.add_resource(incrementResourcesByone,'/incrementByOne')
@@ -47,11 +48,12 @@ api.add_resource(incrementResourcesByValue,'/incrementByValue')
 api.add_resource(decrementResourcesByone,'/decrementByOne')
 api.add_resource(decrementResourcesByValue,'/decrementByValue')
 api.add_resource(issueResource,'/issueResource')
-api.add_resource(acceptReturnedResource,'/acceptResource')
+#api.add_resource(acceptReturnedResource,'/acceptResource')
 api.add_resource(bookingHistory,'/bookingHistory')
 api.add_resource(issuedBookings,'/issuedBookings')
 api.add_resource(blockedUsers,'/blockedUsers')
 api.add_resource(unblockUser,'/unblockUser')
+api.add_resource(blockUser,'/blockUser')
 
 
 @app.route('/')
