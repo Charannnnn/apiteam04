@@ -103,14 +103,14 @@ class DecrementIssuedResource(Resource):
     def post(self):
         data=self.parser.parse_args()
         r=GetResourceById(data['id'])
+        y= int(GetCountById(data['id']))+1
         try:
             if r:
-                query(f"""UPDATE resource SET resources_available = resources_avaliable-1 WHERE resource_id= {data["id"]} ;""")
+                query(f"""UPDATE resource SET resources_available = %s WHERE resource_id= {data["id"]} ;""", y)
                 # query(f"""UPDATE booking SET status = 1 WHERE r_id= {data["id"]} ;""")
         except:
             return {"message": "Coudnt issue resource"}, 401
 
-        
 
 
 class DeleteResource(Resource):
@@ -132,19 +132,19 @@ class DeleteResource(Resource):
 
 
 
-class GetResource(Resource):
-    # @jwt_required
-    def get(self):
-        parser=reqparse.RequestParser()
-        parser.add_argument('id', type=int, required=True, help='resource_id Cannot be blank')
-        parser.add_argument('name', type=str)
-        parser.add_argument('count', type=int)
-        parser.add_argument('resources_available', type=int)
-        data= parser.parse_args()
-        try:
-            return query(f"""Select * from resources where resource_id={data["id"]};""")
-        except:
-            return {"message": "There was an error connecting to user table"}, 200
+# class GetResource(Resource):
+#     # @jwt_required
+#     def get(self):
+#         parser=reqparse.RequestParser()
+#         parser.add_argument('id', type=int, required=True, help='resource_id Cannot be blank')
+#         parser.add_argument('name', type=str)
+#         parser.add_argument('count', type=int)
+#         parser.add_argument('resources_available', type=int)
+#         data= parser.parse_args()
+#         try:
+#             return query(f"""Select * from resources where resource_id={data["id"]};""")
+#         except:
+#             return {"message": "There was an error connecting to user table"}, 200
 
 
 
