@@ -25,7 +25,7 @@ class incrementResourcesByValue(Resource):
         parser.add_argument('c', type=int, required=True, help='count Cannot be blank')
         data= parser.parse_args()
         try:
-            query(f"""UPDATE resources  SET count=count+{data["c"]} and resources_available=resources_available+{data["c"]} where resource_id={data["id"]} """)
+            query(f"""UPDATE resources  SET count=count+CAST({data["c"]} AS UNSIGNED) , resources_available=resources_available+CAST({data["c"]} AS UNSIGNED) where resource_id={data["id"]} """)
             return {"message":"changes are made to resources table","count":data["c"]}, 200
         except:
             return {"message": "There was an error connecting to resources table"}, 500
@@ -38,7 +38,7 @@ class decrementResourcesByValue(Resource):
         parser.add_argument('c', type=int, required=True, help='count Cannot be blank')
         data= parser.parse_args()
         try:
-            query(f"""UPDATE resources  SET count=count-{data["c"]} and resources_available=resources_available-{data["c"]} where resource_id={data["id"]} and count>={data["count"]}""")
+            query(f"""UPDATE resources  SET count=count-CAST({data["c"]} AS UNSIGNED) , resources_available=resources_available-CAST({data["c"]} AS UNSIGNED) where resource_id={data["id"]} and count>=CAST({data["c"]} AS UNSIGNED);""")
             return {"message":"changes are made to resources table"}, 200
         except:
             return {"message": "There was an error connecting to resources table"}, 500
@@ -63,10 +63,10 @@ class decrementResourcesByone(Resource):
         parser.add_argument('id', type=int, required=True, help='resource_id Cannot be blank')
         data= parser.parse_args()
         try:
-            query(f"""UPDATE resources  SET resources_available=resources_available-1 where resource_id={data["id"]} and resources_availabe>0""")
+            query(f"""UPDATE resources  SET resources_available=resources_available-CAST(1 AS UNSIGNED) where resource_id={data["id"]} and resources_available>0""")
             return {"message":"changes are made to resources table"}, 200
         except:
-            return {"message": "There was an error connecting to resources table"}, 500
+            return {"message": "There was an error connecting to resources table while drecrement"}, 500
 
 class issueResource(Resource):
     @jwt_required
