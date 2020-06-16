@@ -44,7 +44,6 @@ class resource_(Resource):
         return None
 
 
-
 class Resourcespresent(Resource):
     @jwt_required
     def get(self):
