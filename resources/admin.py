@@ -67,12 +67,12 @@ class AddExtraResource(Resource):
     parser.add_argument('count',type=int,required=True,help="Count cannot be blank")
     def post(self):
         data=self.parser.parse_args()
-        r=Resource.getResourceById(data['id'])
         try:
-            if r:
-                query(f"""UPDATE resource SET count = count+1 WHERE resource_id= {data["id"]} ;""")
+            result=query(f"""Select * from resources where resource_id={data["id"]}""")
+            if len(len(result)==0):
+                return {"message": "Coudnt add resource because it already exists"}, 401
             else:
-                query(f"""INSERT into resource values({data["id"]}, {data["name"]}, {data["count"]});""")
+                query(f"""INSERT into resource values({data["id"]}, {data["name"]}, {data["count"]} , {data["count"]})""")
         except:
             return {"message": "Coudnt add resource"}, 401
 

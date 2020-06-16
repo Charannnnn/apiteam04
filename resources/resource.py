@@ -93,8 +93,8 @@ class acceptReturnedResource(Resource):
         parser.add_argument('id', type=str, required=True, help='student_id Cannot be blank')
         parser.add_argument('return_time', type=str, required=True, help='return_time Cannot be blank')
         data= parser.parse_args()
-        query(f"""UPDATE booking  SET return_time={data["return_time"]} where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=1 """)
-        '''result=query(f"""select r_id from booking where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
+        query(f"""UPDATE booking  SET return_time={data["return_time"]} where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=1 """)
+        result=query(f"""select r_id from booking where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
         data["resc_id"]=result[0]["r_id"]
         query(f"""UPDATE resources  SET resources_available=resources_available+1 where resource_id={data["resc_id"]}""")
         res=query(f"""select r_id from booking where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and time_to_sec(timediff(return_time,'16:20:00'))/60 >0""",return_json=False)
