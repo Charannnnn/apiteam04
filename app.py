@@ -2,6 +2,7 @@ from flask import Flask,jsonify
 import pymysql
 from flask_restful import Api
 import logging
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from resources.user import *
 from resources.user_cancel import cancelBooking
@@ -11,6 +12,7 @@ from resources.resource import *
 from resources.booking_log import *
 
 app= Flask(__name__)
+CORS(app)
 app.config['PROPAGATE_EXCEPTIONS']=True
 app.config['PREFERRED_URL_SCHEME']='https'
 app.config['JWT_SECRET_KEY']='sportsresourceapikey'
