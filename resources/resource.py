@@ -73,13 +73,14 @@ class issueResource(Resource):
     def get(self):
         parser=reqparse.RequestParser()
         parser.add_argument('id', type=str, required=True, help='student_id Cannot be blank')
+        parser.add_argument('booking_time', type=str, required=True, help='booking_time Cannot be blank')
         data= parser.parse_args()
         try:
             result=query(f"""select * from bookingHistory where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """,return_json=False)
             log=query(f"""Select fine from students where id='{data["id"]}';""",return_json=False)
             if(log[0]['fine']>0):
                 return {"message":"please clear the due"},200
-            query(f"""UPDATE booking  SET status=status+1 where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
+            query(f"""UPDATE booking  SET status=status+1,booking_time=time_format('{data["booking_time"]}',"%T") where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
             if(len(result)!=0):
                 data["resc_id"]=result[0]['r_id']
                 query(f"""UPDATE resources  SET resources_available=resources_available-1 where resource_id={data["resc_id"]} and resources_available>0 """)
@@ -95,14 +96,16 @@ class acceptReturnedResource(Resource):
         parser=reqparse.RequestParser()
         parser.add_argument('id', type=str, required=True, help='student_id Cannot be blank')
         parser.add_argument('return_time', type=str, required=True, help='return_time Cannot be blank')
+        parser.add_argument('return_day', type=str, required=True, help='return_day Cannot be blank')
         data= parser.parse_args()
         try:
-            query(f"""UPDATE booking  SET return_time=time_format('{data["return_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=1""")
+            query(f"""UPDATE booking  SET return_time=time_format('{data["return_time"]}',"%T"),return_day=date_format('{data["return_day"]}',"%Y-%m-%d") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=1""")
             result=query(f"""select r_id from booking where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
             data["resc_id"]=result[0]["r_id"]
             query(f"""UPDATE resources  SET resources_available=resources_available+1 where resource_id={data["resc_id"]}""")
             res=query(f"""select * from bookingHistory where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and time_to_sec(timediff(return_time,'16:20:00'))/60 >0""",return_json=False)
-            if(len(res)!=0):
+            res1=query(f"""select * from bookingHistory where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")<>date_format(curdate(),"%Y-%m-%d")""",return_json=False)
+            if(len(res)!=0 or len(res1)!=0):
                 query(f"""UPDATE students  SET fine=50 where id='{data["id"]}'""")
                 return {"message":"Fine has been added"},200
             else:
