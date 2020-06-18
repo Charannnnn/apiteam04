@@ -1,7 +1,6 @@
 from flask import Flask,jsonify
 import pymysql
 from flask_restful import Api
-import logging
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from resources.user import *
@@ -32,6 +31,7 @@ def invalid_token_callback(error):
         'error': 'invalid_token',
         'message': 'Signature verification failed.'
     }), 401
+
 
 
 api.add_resource(Users,'/users')

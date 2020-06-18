@@ -74,7 +74,11 @@ class bookResource(Resource):
             return {"message":"You can't book the resource until your due is cleared"},400
         log=query(f"""select resource_id,resources_available from resources where resource_name='{data["name"]}';""",return_json=False)
         log1=query(f"""select * from bookingHistory where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
-        if(len(log)!=0 and len(log1)==0 and log[0]['resources_available']>0):
+        log2=query(f""" select date_format('{data['day']}',"%Y-%m-%d")=curdate() as dif; """,return_json=False)
+        a=len(log)
+        b=len(log1)
+        c=log2[0]['dif']
+        if(len(log)!=0 and len(log1)==0 and c==1 and log[0]['resources_available']>0):
             try:
                 query(f"""INSERT INTO booking(user_id,r_id,day,reservation_time,status)
                                     VALUES('{data['id']}',CAST({log[0]['resource_id']} as UNSIGNED),date_format('{data['day']}',"%Y-%m-%d"),
