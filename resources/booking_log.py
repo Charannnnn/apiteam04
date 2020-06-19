@@ -63,6 +63,6 @@ class bookingRequests(Resource):
     @jwt_required
     def get(self):
         try:
-            return query(f"""Select * from bookingHistory1 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0;""")
+            return query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
