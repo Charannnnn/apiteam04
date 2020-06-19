@@ -75,8 +75,8 @@ class bookResource(Resource):
         log=query(f"""select resource_id,resources_available from resources where resource_name='{data["name"]}';""",return_json=False)
         log1=query(f"""select * from bookingHistory1 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
         log2=query(f""" select date_format('{data['day']}',"%Y-%m-%d")=curdate() as dif; """,return_json=False)
-        a=len(log)
-        b=len(log1)
+        #a=len(log)
+        #b=len(log1)
         c=log2[0]['dif']
         if(len(log)!=0 and len(log1)==0 and c==1 and log[0]['resources_available']>0):
             try:
@@ -86,7 +86,7 @@ class bookResource(Resource):
 
                 return {"message": "Booking is successful."}, 201
             except:
-                return {"message": "An error occurred while booking."}, 500
+                return {"message": "An error occurred while booking."}, 400
         else:
             return {"message": "Resource is not available for you now,try to book after some time."}, 400
 
