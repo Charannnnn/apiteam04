@@ -91,7 +91,6 @@ class bookResource(Resource):
             return {"message": "Resource is not available for you now,try to book after some time."}, 400
 
 
-
 '''class bookResource(Resource):
     @jwt_required
     def post(self):
