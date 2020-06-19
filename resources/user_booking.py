@@ -13,13 +13,20 @@ class User_Bookings_log(Resource):
         data= parser.parse_args()
         #result=[]
         try:
-            result= query(f"""Select * from bookingHistory where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
+            res= query(f"""Select * from bookingHistory where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
             #log2= query(f"""Select * from bookingHistory where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=(date_format(curdate()-1,"%Y-%m-%d"))""",return_json=False)
             #if(len(log1)!=0):
                 #result.append(log1)
             #if(len(log2)!=0):
                 #result.append(log2)
-            return jsonify({'bookings':result})
+            return jsonify({"booking_time":res[0]['booking_time'],
+                            "day": res[0]['day'],
+                            "r_id": res[0]['r_id'],
+                            "reservation_time": res[0]['reservation_time'],
+                            "return_day": res[0]['return_day'],
+                            "return_time": res[0]['return_time'],
+                            "status": res[0]['status'],
+                            "user_id": res[0]['user_id']})
         except:
             return {"message": "There was an error connecting to bookings table"}, 500
 
