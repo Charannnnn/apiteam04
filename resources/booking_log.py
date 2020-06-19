@@ -7,7 +7,7 @@ class bookingHistory(Resource):
     @jwt_required
     def get(self):
         try:
-            return query(f"""Select * from bookingHistory where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d");""")
+            return query(f"""Select * from bookingHistory1 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d");""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
 
@@ -16,7 +16,7 @@ class issuedBookings(Resource):
     @jwt_required
     def get(self):
         try:
-            return query(f"""Select * from bookingHistory where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status = 1 """)
+            return query(f"""Select * from bookingHistory1 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status = 1 """)
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
 
@@ -63,6 +63,6 @@ class bookingRequests(Resource):
     @jwt_required
     def get(self):
         try:
-            return query(f"""Select * from bookingHistory where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0;""")
+            return query(f"""Select * from bookingHistory1 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500

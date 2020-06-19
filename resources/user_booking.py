@@ -44,7 +44,7 @@ class UserBookingFine(Resource):
             if(len(log)==0):
                 return {"message":"No Due"},200
             else:
-                log1= query(f""" select * from bookingHistory where user_id={data["id"]} """,return_json=False)
+                log1= query(f""" select * from bookingHistory1 where user_id={data["id"]} """,return_json=False)
                 result.append(log1[-1])
                 return jsonify(result)
         except:
