@@ -7,7 +7,7 @@ from resources.user import Users
 from datetime import date
 class User_Bookings_log(Resource):
     @jwt_required
-    def get(self):
+    def post(self):
         parser=reqparse.RequestParser()
         parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
         data= parser.parse_args()
