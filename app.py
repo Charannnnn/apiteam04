@@ -57,6 +57,8 @@ api.add_resource(blockedUsers,'/blockedUsers')
 api.add_resource(unblockUser,'/unblockUser')
 api.add_resource(blockUser,'/blockUser')
 api.add_resource(bookResource,'/bookResource')
+api.add_resource(bookingRequests,'/bookingRequests')
+api.add_resource(rejectBooking,'/rejectBooking')
 
 @app.route('/')
 def home():
