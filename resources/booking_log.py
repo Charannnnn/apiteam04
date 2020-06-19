@@ -58,3 +58,11 @@ class blockUser(Resource):
             return {"message": "User doen't Exist"}, 500
         except:
             return {"message": "There was an error connecting to the student table"}, 500
+
+class bookingRequests(Resource):
+    @jwt_required
+    def get(self):
+        try:
+            return query(f"""Select * from bookingHistory where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0;""")
+        except:
+            return {"message": "There was an error connecting to the booking table"}, 500

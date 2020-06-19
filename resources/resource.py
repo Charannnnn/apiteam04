@@ -113,3 +113,16 @@ class acceptReturnedResource(Resource):
         except:
             return {"message": "There was an error connecting to resources table"}, 500
 
+class rejectBooking(Resource):
+    @jwt_required
+    def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('id', type=str, required=True, help='student_id Cannot be blank')
+        data= parser.parse_args()
+        try:
+            query(f"""UPDATE booking  SET status=status+2 where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
+            return {"message": "updated status"}, 200
+        except:
+            return {"message": "There was an error connecting to booking table"}, 500
+
+
