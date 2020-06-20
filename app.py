@@ -4,7 +4,7 @@ from flask_restful import Api
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from resources.user import *
-from resources.user_cancel import cancelBooking
+from resources.user_cancel import *
 from resources.admin import *
 from resources.user_booking import *
 from resources.resource import *
@@ -59,6 +59,7 @@ api.add_resource(blockUser,'/blockUser')
 api.add_resource(bookResource,'/bookResource')
 api.add_resource(bookingRequests,'/bookingRequests')
 api.add_resource(rejectBooking,'/rejectBooking')
+api.add_resource(check,'/check')
 
 @app.route('/')
 def home():
