@@ -25,7 +25,16 @@ class blockedUsers(Resource):
     @jwt_required
     def get(self):
         try:
-            return query(f"""Select * from students where fine>0 """)
+            return query(f"""select
+                            s.name,b.user_id,b.r_id,date_format(b.day,"%Y-%m-%d") as day,time_format(b.reservation_time,"%T") as reservation_time,
+                            time_format(b.booking_time,"%T") as booking_time,
+                            time_format(b.return_time,"%T") as return_time,
+                            date_format(b.return_day,"%Y-%m-%d") as return_day,
+                            r.resource_name as resource_name,
+                            b.status,s.fine
+                            from students s,booking b,resources r
+                            where s.fine>0 and b.r_id=r.resource_id and b.user_id=s.id and b.day =(select max(day) from booking b1 where b1.user_id=b.user_id)
+                            order by b.day;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
 
