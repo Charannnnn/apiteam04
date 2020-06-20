@@ -50,4 +50,12 @@ class UserBookingFine(Resource):
         except:
             return {"message": "There was an error connecting to students table"}, 500
 
+class allBookings(Resource):
+    @jwt_required
+    def get(self):
+        try:
+            return query(f"""Select * from bookingHistory1 ;""")
+        except:
+            return {"message": "There was an error connecting to the booking table"}, 500
+
 
