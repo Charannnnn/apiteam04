@@ -4,7 +4,7 @@ from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
 from db import query
 from resources.user import Users
-from datetime import date
+from datetime import date,datetime,timedelta
 
 class cancelBooking(Resource):
     @jwt_required
@@ -25,3 +25,13 @@ class cancelBooking(Resource):
                 return jsonify(result)
         except:
             return {"message": "Cannot connect to the bookings table"}, 500
+
+class check(Resource):
+    def get(slef):
+        try:
+            now = datetime.now()
+            now+timedelta(hours=5,minutes=30)
+            current_time = now.strftime("%H:%M:%S")
+            return {"message":current_time},200
+        except:
+            return {"m":"failed"},500
