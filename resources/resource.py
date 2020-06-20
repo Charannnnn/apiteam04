@@ -111,7 +111,7 @@ class acceptReturnedResource(Resource):
         now=now+timedelta(hours=5,minutes=30)
         current_time = now.strftime("%H:%M:%S")
         today = date.today()
-        d1 = today.strftime("%Y/%m/%d")
+        d1 = today.strftime("%Y-%m-%d")#check r_id - comparision with todays  date,instead take return time to check that
         data["return_time"]=str(current_time)
         data["return_day"]=str(d1)
         try:
