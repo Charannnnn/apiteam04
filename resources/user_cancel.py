@@ -30,7 +30,7 @@ class check(Resource):
     def get(slef):
         try:
             now = datetime.now()
-            now+timedelta(hours=5,minutes=30)
+            now+timedelta(hours=11)
             current_time = now.strftime("%H:%M:%S")
             return {"message":current_time},200
         except:
