@@ -80,7 +80,7 @@ class returnedHistory(Resource):
     @jwt_required
     def get(self):
         try:
-            return query(f"""Select * from bookingHistory1 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and return_day is not Null ;""")
+            return query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and return_day is not Null ;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
 
@@ -88,6 +88,6 @@ class notreturnedHistory(Resource):
     @jwt_required
     def get(self):
         try:
-            return query(f"""Select * from bookingHistory1 where return_day is Null ;""")
+            return query(f"""Select * from bookingHistory2 where return_day is Null ;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
