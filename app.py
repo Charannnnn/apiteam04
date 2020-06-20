@@ -60,6 +60,8 @@ api.add_resource(bookResource,'/bookResource')
 api.add_resource(bookingRequests,'/bookingRequests')
 api.add_resource(rejectBooking,'/rejectBooking')
 api.add_resource(check,'/check')
+api.add_resource(returnedHistory,'/returnedHistory')
+api.add_resource(notreturnedHistory,'/notreturnedHistory')
 
 @app.route('/')
 def home():

@@ -62,7 +62,7 @@ class blockUser(Resource):
         try:
             res=query(f"""select * from students where id={data["id"]};""",return_json=False)
             if(len(res)!=0):
-                query(f""" UPDATE students SET fine=fine+50 where id= {data["id"]} """)
+                query(f""" UPDATE students SET fine=50 where id= {data["id"]} """)
                 return {"message":"Fine amount is now updated"},200
             return {"message": "User doen't Exist"}, 500
         except:
@@ -73,5 +73,21 @@ class bookingRequests(Resource):
     def get(self):
         try:
             return query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0;""")
+        except:
+            return {"message": "There was an error connecting to the booking table"}, 500
+
+class returnedHistory(Resource):
+    @jwt_required
+    def get(self):
+        try:
+            return query(f"""Select * from bookingHistory1 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and return_day is not Null ;""")
+        except:
+            return {"message": "There was an error connecting to the booking table"}, 500
+
+class notreturnedHistory(Resource):
+    @jwt_required
+    def get(self):
+        try:
+            return query(f"""Select * from bookingHistory1 where return_day is Null ;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
