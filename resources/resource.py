@@ -104,9 +104,16 @@ class acceptReturnedResource(Resource):
     def get(self):
         parser=reqparse.RequestParser()
         parser.add_argument('id', type=str, required=True, help='student_id Cannot be blank')
-        parser.add_argument('return_time', type=str, required=True, help='return_time Cannot be blank')
-        parser.add_argument('return_day', type=str, required=True, help='return_day Cannot be blank')
+        #parser.add_argument('return_time', type=str, required=True, help='return_time Cannot be blank')
+        #parser.add_argument('return_day', type=str, required=True, help='return_day Cannot be blank')
         data= parser.parse_args()
+        now = datetime.now()
+        now=now+timedelta(hours=5,minutes=30)
+        current_time = now.strftime("%H:%M:%S")
+        today = date.today()
+        d1 = today.strftime("%Y/%m/%d")
+        data["return_time"]=str(current_time)
+        data["return_day"]=str(d1)
         try:
             query(f"""UPDATE booking  SET return_time=time_format('{data["return_time"]}',"%T"),return_day=date_format('{data["return_day"]}',"%Y-%m-%d") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=1""")
             result=query(f"""select r_id from booking where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
