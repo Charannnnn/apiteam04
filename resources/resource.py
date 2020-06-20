@@ -4,7 +4,7 @@ from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
 from db import query
 from resources.user import Users
-from datetime import datetime
+from datetime import datetime,timedelta,date
 
 class resourceDetails(Resource):
     @jwt_required
@@ -76,6 +76,7 @@ class issueResource(Resource):
         #parser.add_argument('booking_time', type=str, required=True, help='booking_time Cannot be blank')
         data= parser.parse_args()
         now = datetime.now()
+        now=now+timedelta(hours=5,minutes=30)
         current_time = now.strftime("%H:%M:%S")
         data["booking_time"]=str(current_time)
         try:
