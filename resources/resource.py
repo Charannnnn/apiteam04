@@ -4,7 +4,7 @@ from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
 from db import query
 from resources.user import Users
-from datetime import date
+from datetime import datetime
 
 class resourceDetails(Resource):
     @jwt_required
@@ -73,14 +73,21 @@ class issueResource(Resource):
     def get(self):
         parser=reqparse.RequestParser()
         parser.add_argument('id', type=str, required=True, help='student_id Cannot be blank')
-        parser.add_argument('booking_time', type=str, required=True, help='booking_time Cannot be blank')
+        #parser.add_argument('booking_time', type=str, required=True, help='booking_time Cannot be blank')
         data= parser.parse_args()
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        data["booking_time"]=str(current_time)
         try:
             result=query(f"""select * from bookingHistory1 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """,return_json=False)
             log=query(f"""Select fine from students where id='{data["id"]}';""",return_json=False)
             if(log[0]['fine']>0):
                 return {"message":"please clear the due"},200
-            query(f"""UPDATE booking  SET status=status+1,booking_time=time_format('{data["booking_time"]}',"%T") where user_id={data["id"]} and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
+            query(f"""UPDATE booking  SET status=2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
+            query(f"""UPDATE booking  SET status=1,booking_time=time_format('{data["booking_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1 """)
+            #except:
+                #query(f"""UPDATE booking  SET status=status+2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
+                #return {"message":"cancel your booking and try again"},200
             if(len(result)!=0):
                 data["resc_id"]=result[0]['r_id']
                 query(f"""UPDATE resources  SET resources_available=resources_available-1 where resource_id={data["resc_id"]} and resources_available>0 """)
@@ -88,6 +95,7 @@ class issueResource(Resource):
             else:
                 return {"message":"You didn't book any  resource"},404
         except:
+            #query(f"""UPDATE booking  SET status=status+2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
             return {"message": "There was an error connecting to booking table"}, 500
 
 class acceptReturnedResource(Resource):
