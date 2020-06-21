@@ -16,7 +16,7 @@ class cancelBooking(Resource):
         now=now-timedelta(hours=4,minutes=30)
         current_time = now.strftime("%H:%M:%S")
         current_time=str(current_time)
-        data['current_time']=current_time
+        data['current_time']="12:30:00"
         try:
             log1=query(f"""Select * from bookingHistory1 where user_id='{data["id"]}' and time_to_sec(timediff('{data['current_time']}',reservation_time))/60 <=20 and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1""",return_json=False)
             

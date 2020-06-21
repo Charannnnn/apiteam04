@@ -54,7 +54,7 @@ class allBookings(Resource):
     @jwt_required
     def get(self):
         try:
-            return query(f"""Select * from bookingHistory1 ;""")
+            return query(f"""Select * from bookingHistory1 where status<>2;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
 
