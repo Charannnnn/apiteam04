@@ -5,4 +5,3 @@ pymysql
 gunicorn
 flask_cors
 waitress
-cross_origin
