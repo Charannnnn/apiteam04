@@ -2,7 +2,7 @@ from flask_restful import Resource,reqparse
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
 from db import query
-
+from datetime import date,datetime,timedelta
 class bookingHistory(Resource):
     @jwt_required
     def get(self):
@@ -71,7 +71,12 @@ class blockUser(Resource):
 class bookingRequests(Resource):
     @jwt_required
     def get(self):
+        now = datetime.now()
+        now=now+timedelta(hours=5,minutes=30)
+        current_time = now.strftime("%H:%M:%S")
+        current_time=str(current_time)
         try:
+            query(f"""UPDATE booking set status=CAST(2 AS UNSIGNED) where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 and time_to_sec(timediff('{current_time}',reservation_time))/60 >20;""")
             return query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
