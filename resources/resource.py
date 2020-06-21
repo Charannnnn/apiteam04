@@ -111,16 +111,16 @@ class acceptReturnedResource(Resource):
         now=now+timedelta(hours=5,minutes=30)
         current_time = now.strftime("%H:%M:%S")
         today = date.today()
-        d1 = today.strftime("%Y-%m-%d")#check r_id - comparision with todays  date,instead take return time to check that
+        d1 = today.strftime("%Y-%m-%d")#check r_id - comparision with todays  date,instead take return time to check that and status=1
         data["return_time"]=str(current_time)
         data["return_day"]=str(d1)
         try:
-            query(f"""UPDATE booking  SET return_time=time_format('{data["return_time"]}',"%T"),return_day=date_format('{data["return_day"]}',"%Y-%m-%d") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=1""")
-            result=query(f"""select r_id from booking where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
+            result=query(f"""select r_id from booking where user_id='{data["id"]}' and return_day is Null and status= CAST(1 AS UNSIGNED)""",return_json=False)
             data["resc_id"]=result[0]["r_id"]
+            query(f"""UPDATE booking  SET return_time=time_format('{data["return_time"]}',"%T"),return_day=date_format('{data["return_day"]}',"%Y-%m-%d") where user_id='{data["id"]}' and return_day is Null and status=1""")
             query(f"""UPDATE resources  SET resources_available=resources_available+1 where resource_id={data["resc_id"]}""")
             res=query(f"""select * from bookingHistory1 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and time_to_sec(timediff(return_time,'16:20:00'))/60 >0""",return_json=False)
-            res1=query(f"""select * from bookingHistory1 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")<>date_format(curdate(),"%Y-%m-%d")""",return_json=False)
+            res1=query(f"""select * from bookingHistory1 where user_id='{data["id"]}' and date_format(return_day,"%Y-%m-%d")<>date_format(day,"%Y-%m-%d") and date_format(return_day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") """,return_json=False)
             if(len(res)!=0 or len(res1)!=0):
                 query(f"""UPDATE students  SET fine=50 where id='{data["id"]}'""")
                 return {"message":"Fine has been added"},200

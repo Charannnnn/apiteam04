@@ -61,7 +61,7 @@ class Users(Resource):
 class bookResource(Resource):
     @jwt_required
     def post(self):
-        parser=reqparse.RequestParser()
+        parser=reqparse.RequestParser() #cannot book even if he doesnot return any resource have to add that
         parser.add_argument('id',type=str,required=True,help="ID cannot be  blank!")
         parser.add_argument('name',type=str,required=True,help="resource_name cannot be  blank!")
         parser.add_argument('day',type=str,required=True,help="date cannot be left blank!")
@@ -71,10 +71,12 @@ class bookResource(Resource):
         if(res[0]['fine']>0):
             return {"message":"You can't book the resource until your due is cleared"},400
         log=query(f"""select resource_id,resources_available from resources where resource_name='{data["name"]}';""",return_json=False)
+        result=query(f"""select * from booking where user_id='{data["id"]}' and return_day is Null and status= CAST(1 AS UNSIGNED)""",return_json=False)
         log1=query(f"""select * from bookingHistory1 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")""",return_json=False)
         log2=query(f""" select date_format('{data['day']}',"%Y-%m-%d")=curdate() as dif; """,return_json=False)
         c=log2[0]['dif']
-        if(len(log)!=0 and len(log1)==0 and c==1 and log[0]['resources_available']>0):
+        d=len(result)
+        if(len(log)!=0 and len(log1)==0 and c==1 and d==0 and log[0]['resources_available']>0):
             try:
                 query(f"""INSERT INTO booking(user_id,r_id,day,reservation_time,status) VALUES('{data['id']}',CAST({log[0]['resource_id']} as UNSIGNED),date_format('{data['day']}',"%Y-%m-%d"),time_format('{data['reservation_time']}',"%T"),0);""")
 
@@ -82,4 +84,4 @@ class bookResource(Resource):
             except:
                 return {"message": "An error occurred while booking."}, 400
         else:
-            return {"message": "Resource is not available for you now,try to book after some time."}, 400
+            return {"message": "Resource is not available for you now,try to book after some time or return the issued resources."}, 400
