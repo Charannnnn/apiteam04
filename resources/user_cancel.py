@@ -18,7 +18,7 @@ class cancelBooking(Resource):
         current_time=str(current_time)
         data['current_time']="12:30:00"
         try:
-            log1=query(f"""Select * from bookingHistory1 where user_id='{data["id"]}' and time_to_sec(timediff('{data['current_time']}',reservation_time))/60 <=20 and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1""",return_json=False)
+            log1=query(f"""Select * from bookingHistory1 where user_id='{data["id"]}' and time_to_sec(timediff('{data['current_time']}',reservation_time))/60 <=20 and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """,return_json=False)
             
             if(len(log1)==0):
                 return {"message": "Can't Cancel your booking request"}, 400
