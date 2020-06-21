@@ -8,7 +8,7 @@ from datetime import date,datetime,timedelta
 
 class cancelBooking(Resource):
     @jwt_required
-    def delete(self):
+    def post(self):
         parser=reqparse.RequestParser()
         parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
         data= parser.parse_args()
