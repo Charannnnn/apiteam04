@@ -17,6 +17,7 @@ The/adminLogin endpoint is only meant for the admins and momentarily there is on
 /AddExtraResource- The admin can only make changes after providing the access token. Updates the resources table and increases the count value when a new resource is bought by the administration.<br><br>
 /DeleteResource-  The admin can only make changes after providing the access token. Updates the resources table and decreases the count value when a new resource is bought by the administration.<br><br>
 /userBookingslog<br><br>
+![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(225).png)
 /userDue-GET request from the ----- table in order to receive the due of a student if any<br><br>
 /cancelBooking- POST request to first check if the booking exists and then change it's status to unbooked and give a message to the user.<br><br>
 /resourceDetails- GET request to receive all the details of a given resource from the resource table with the help of an ID.<br><br>
@@ -29,12 +30,15 @@ The/adminLogin endpoint is only meant for the admins and momentarily there is on
 /bookingHistory-GET request to obtain the log of all bookings made from the BookingHistory1 view.<br><br>
 /issuedBookings-GET request to obtain the log of all bookings made on the current day from the BookingHistory1 view.<br><br>
 /blockedUsers- GET request to receive the users who have been blocked so as to not issue any more resources<br><br>
+![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(231).png)
 /unblockUser-GET request updating the database to obtain the status of the user and to change the status of due of the user when a user pays their dues. <br><br>
 /blockUser-GET request to update the fine next to the id of a user using the id.<br><br>
 /bookResource-<br><br>
 /rejectBooking-GET request to check if the user has dues and if dues exist, the booking cannot be made <br><br>
-/returnedHistory-GET request to obtain the log of all the users who returned booked resources till that time from the BookingHistory2 view.<br><br>
+/returnedHistory-GET request to obtain the log of all the users who returned booked resources for today from the BookingHistory2 view.<br><br>
+![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(227).png)
 /notreturnedHistory'- GET request to obtain the log of all the users who hadn't returned booked resources till that time from the BookingHistory2 view.<br><br>
+![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(229).png)
 /allBookings-GET request to receive all the bookings from the view BookingHistory1.<br><br>
 
 
