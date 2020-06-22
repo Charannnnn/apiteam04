@@ -13,7 +13,7 @@ class User_Bookings_log(Resource):
         data= parser.parse_args()
         #result=[]
         try:
-            res= query(f"""Select * from bookingHistory where user_id='{data["id"]}' and return_day is Null and status<>2 """,return_json=False)
+            res= query(f"""Select * from bookingHistory where user_id='{data["id"]}'  and status<>CAST(2 AS UNSIGNED) and return_day is Null """,return_json=False)
             res1=query(f""" select resource_name from resources where resource_id={res[0]['r_id']} """,return_json=False)
             #log2= query(f"""Select * from bookingHistory where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=(date_format(curdate()-1,"%Y-%m-%d"))""",return_json=False)
             #if(len(log1)!=0):

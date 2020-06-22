@@ -85,14 +85,20 @@ class issueResource(Resource):
             if(log[0]['fine']>0):
                 return {"message":"please clear the due"},200
             query(f"""UPDATE booking  SET status=2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
-            query(f"""UPDATE booking  SET status=1,booking_time=time_format('{data["booking_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1 """)
+            #query(f"""UPDATE booking  SET status=1,booking_time=time_format('{data["booking_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1 """)
             #except:
                 #query(f"""UPDATE booking  SET status=status+2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
                 #return {"message":"cancel your booking and try again"},200
             if(len(result)!=0):
                 data["resc_id"]=result[0]['r_id']
-                query(f"""UPDATE resources  SET resources_available=resources_available-1 where resource_id={data["resc_id"]} and resources_available>0 """)
-                return {"message": "updated available resources"}, 200
+                res1=query(f"""select * from resources  where resource_id={data["resc_id"]}""")
+                if(res1[0]['resource_id']>0):
+                    query(f"""UPDATE resources  SET resources_available=resources_available-1 where resource_id={data["resc_id"]} and resources_available>0 """)
+                    query(f"""UPDATE booking  SET status=1,booking_time=time_format('{data["booking_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1 """)
+                    return {"message": "updated available resources"}, 200
+                else:
+                    return {"message": "Sorry there are no available resources"}, 200
+
             else:
                 return {"message":"You didn't book any  resource"},404
         except:
