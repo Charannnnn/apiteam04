@@ -25,10 +25,10 @@ The/adminLogin endpoint is only meant for the admins and momentarily there is on
 /incrementByValue- The admin can only make changes after providing the access token. Updates the resources table and increases the count value when a new resource is bought by the administration.<br><br>
 /decrementByOne- The admin can only make changes after providing the access token. Updates the resources table and deecreases the count value by 1 when a new resource is bought by the administration.<br><br>
 /decrementByValue- GET request which the admin can only make after providing the access token. Updates the resources table and decreases the count value when a new resource is bought by the administration.<br><br>
-/issueResource-<br><br>
-/acceptResource- GET request to obtain the data regarding the date of issue and also update the valuee of the resources left in the resource table.<br><br>
+/issueResource- will update the booking_time and will set the status to one <br><br>
+/acceptResource- will update the resources available and will set the fine automatically if he fails to return after 4:20pm .<br><br>
 /bookingHistory-GET request to obtain the log of all bookings made from the BookingHistory1 view.<br><br>
-/issuedBookings-GET request to obtain the log of all bookings made on the current day from the BookingHistory1 view.<br><br>
+/issuedBookings-GET request to obtain the log of all bookings  issued made on the current day from the BookingHistory1 view.<br><br>
 /blockedUsers- GET request to receive the users who have been blocked so as to not issue any more resources<br><br>
 ![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(231).png)
 /unblockUser-GET request updating the database to obtain the status of the user and to change the status of due of the user when a user pays their dues. <br><br>
