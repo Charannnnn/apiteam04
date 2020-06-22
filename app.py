@@ -34,14 +34,10 @@ def invalid_token_callback(error):
     }), 401
 
 
-
-api.add_resource(Users,'/users')
 api.add_resource(UserRegister,'/register')
 api.add_resource(UserLogin,'/login')
 api.add_resource(AdminLogin, '/AdminLogin')
 api.add_resource(Resourcespresent, '/ResourcesPresent')
-api.add_resource(AddExtraResource, '/AddExtraResource')
-api.add_resource(DeleteResource, '/DeleteResource')
 api.add_resource(User_Bookings_log,'/userBookingslog')
 api.add_resource(UserBookingFine,'/userDue')
 api.add_resource(cancelBooking,'/cancelBooking')
@@ -60,10 +56,13 @@ api.add_resource(blockUser,'/blockUser')
 api.add_resource(bookResource,'/bookResource')
 api.add_resource(bookingRequests,'/bookingRequests')
 api.add_resource(rejectBooking,'/rejectBooking')
-api.add_resource(check,'/check')
 api.add_resource(returnedHistory,'/returnedHistory')
 api.add_resource(notreturnedHistory,'/notreturnedHistory')
 api.add_resource(allBookings,'/allBookings')
+# api.add_resource(AddExtraResource, '/AddExtraResource')
+# api.add_resource(DeleteResource, '/DeleteResource')
+#api.add_resource(check,'/check')
+#api.add_resource(Users,'/users')
 
 
 @app.route('/')
