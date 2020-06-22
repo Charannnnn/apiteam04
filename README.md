@@ -13,13 +13,13 @@ b) /login-takes a JSON object with 'username' and 'password' and gives back JWT 
 
 The/adminLogin endpoint is only meant for the admins and momentarily there is one admin in the admin table who can make changes in the respective tables. This table also takes a JSON object with 'username' and 'password' and gives back JWT token if exists in Admin table. The JWT shall be used to access all the end points. For all the endpoints an Authorization Header should be included with value 'Bearer '.<br><br>
 
-/ResourcesPresent- GET request from the resource table to give the number of a specific resource present obtained by the id.<br><br>
-/AddExtraResource- The admin can only make changes after providing the access token. Updates the resources table and increases the count value when a new resource is bought by the administration.<br><br>
-/DeleteResource-  The admin can only make changes after providing the access token. Updates the resources table and decreases the count value when a new resource is bought by the administration.<br><br>
-/userBookingslog<br><br>
+/ResourcesPresent- GET request from the resource table to give details of  all the resources present .<br><br>
+/AddExtraResource- The admin can only make changes after providing the access token. Updates the resources table and inserts a resource when a new resource is bought by the administration.<br><br>
+/DeleteResource-  The admin can only make changes after providing the access token. Updates the resources table and  deletes the resource specified by id .<br><br>
+/userBookingslog - It provides the details of the booking ehich is not yet returned by the user or which is currently booked by the user<br><br>
 ![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(225).png)
-/userDue-GET request from the ----- table in order to receive the due of a student if any<br><br>
-/cancelBooking- POST request to first check if the booking exists and then change it's status to unbooked and give a message to the user.<br><br>
+/userDue-GET request in order to receive the due of a student if any and the details of the resource which they didn't return <br><br>
+/cancelBooking- POST request to first check if the booking exists and then change it's status to unbooked/rejected and give a message to the user.<br><br>
 /resourceDetails- GET request to receive all the details of a given resource from the resource table with the help of an ID.<br><br>
 /incrementByOne-The admin can only make changes after providing the access token. Updates the resources table and increases the count value by 1 when a new resource is bought by the administration.<br><br>
 /incrementByValue- The admin can only make changes after providing the access token. Updates the resources table and increases the count value when a new resource is bought by the administration.<br><br>
