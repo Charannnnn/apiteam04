@@ -43,12 +43,6 @@ class resource_(Resource):
             return resource_(result[0]['resource_id'],result[0]['resource_name'],result[0]['count'],result[0]['resources_available'])
         return None
 
-    @classmethod
-    def check_available_resources(cls, id):
-        y=query(f"""SELECT * from resources WHERE resource_id={id}""",return_json=False)
-        if len(result)>0: 
-            return resource_(result[0]['resources_available'])
-        return None
 
 
 
