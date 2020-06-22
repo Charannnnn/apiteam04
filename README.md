@@ -38,7 +38,7 @@ The/adminLogin endpoint is only meant for the admins and momentarily there is on
 /returnedHistory-GET request to obtain the log of all the users who returned booked resources for today from the BookingHistory2 view.<br><br>
 ![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(227).png)
 /notreturnedHistory'- GET request to obtain the log of all the users who hadn't returned booked resources till that time from the BookingHistory2 view.<br><br>
-![](
+![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(229).png)
 /allBookings-GET request to receive all the bookings from the view BookingHistory1.<br><br>
 
 
