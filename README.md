@@ -34,7 +34,8 @@ The/adminLogin endpoint is only meant for the admins and momentarily there is on
 /blockUser-GET request to update the fine next to the id of a user using the id.<br><br>
 /bookResource-<br><br>
 /rejectBooking-GET request to check if the user has dues and if dues exist, the booking cannot be made <br><br>
-/returnedHistory-GET request to obtain the log of all the users who returned booked resources till that time from the BookingHistory2 view.<br><br>
+/returnedHistory-GET request to obtain the log of all the users who returned booked resources for today from the BookingHistory2 view.<br><br>
+![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(227).png)
 /notreturnedHistory'- GET request to obtain the log of all the users who hadn't returned booked resources till that time from the BookingHistory2 view.<br><br>
 /allBookings-GET request to receive all the bookings from the view BookingHistory1.<br><br>
 
