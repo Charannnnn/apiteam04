@@ -17,6 +17,7 @@ The/adminLogin endpoint is only meant for the admins and momentarily there is on
 /AddExtraResource- The admin can only make changes after providing the access token. Updates the resources table and increases the count value when a new resource is bought by the administration.<br><br>
 /DeleteResource-  The admin can only make changes after providing the access token. Updates the resources table and decreases the count value when a new resource is bought by the administration.<br><br>
 /userBookingslog<br><br>
+![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(225).png)
 /userDue-GET request from the ----- table in order to receive the due of a student if any<br><br>
 /cancelBooking- POST request to first check if the booking exists and then change it's status to unbooked and give a message to the user.<br><br>
 /resourceDetails- GET request to receive all the details of a given resource from the resource table with the help of an ID.<br><br>
