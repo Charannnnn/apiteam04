@@ -1,7 +1,7 @@
 # apiteam04
 
-Flask RESTful API for Sports resources booking Application
-This API has been deployed onto Heroku.
+Flask RESTful API for Sports resources booking Application<br>
+This API has been deployed onto Heroku.<br>
 
 The main purpose of this API is for students to be able to book sports resources and for the admins to keep tab on the availablity of resources along with streamlining the fine process.
 
