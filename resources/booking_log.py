@@ -43,3 +43,18 @@ class unblockUser(Resource):
             return {"message": "User doen't have any Fine"}, 200
         except:
             return {"message": "There was an error connecting to the student table"}, 500
+
+class blockUser(Resource):
+    @jwt_required
+    def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
+        data= parser.parse_args()
+        try:
+            res=query(f"""select * from students where id={data["id"]};""",return_json=False)
+            if(len(res)!=0):
+                query(f""" UPDATE students SET fine=fine+50 where id= {data["id"]} """)
+                return {"message":"Fine amount is now updated"},200
+            return {"message": "User doen't Exist"}, 500
+        except:
+            return {"message": "There was an error connecting to the student table"}, 500

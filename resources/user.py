@@ -58,7 +58,73 @@ class Users(Resource):
         except:
             return {"message": "There was an error connecting to user table"}, 200
 
+class bookResource(Resource):
+    @jwt_required
+    def post(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('id',type=str,required=True,help="ID cannot be  blank!")
+        parser.add_argument('name',type=str,required=True,help="resource_name cannot be  blank!")
+        parser.add_argument('day',type=str,required=True,help="date cannot be left blank!")
+        parser.add_argument('reservation_time',type=str,required=True,help="reservation_time  cannot be  blank!")
+        parser.add_argument('booking_time',type=str,required=True,help="booking_time  cannot be  blank!")
+        #parser.add_argument('return_time',type=str)
+        data=parser.parse_args()
+        res=query(f"""select fine from students where id='{data["id"]}';""",return_json=False)
+        if(res[0]['fine']>0):
+            return {"message":"You can't book the resource until your due is cleared"},400
+        log=query(f"""select resource_id,resources_available from resources where resource_name='{data["name"]}';""",return_json=False)
+        log1=query(f"""select * from bookingHistory where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") ;""",return_json=False)
+        if(len(log)!=0 and len(log1)==0 and log[0]['resources_available']>0):
+            try:
+                query(f"""INSERT INTO booking(user_id,r_id,day,reservation_time,booking_time,status)
+                                    VALUES('{data['id']}',CAST({log[0]['resource_id']} as UNSIGNED),date_format('{data['day']}',"%Y-%m-%d"),
+                                        time_format('{data['reservation_time']}',"%T"),time_format('{data['booking_time']}',"%T"),0);""")
 
+                return {"message": "Booking is successfully."}, 201
+            except:
+                return {"message": "An error occurred while booking."}, 500
+        else:
+            return {"message": "Resource is not available now,try to book after some time."}, 400
+
+
+
+'''class bookResource(Resource):
+    @jwt_required
+    def post(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('id',type=str,required=True,help="ID cannot be  blank!")
+        parser.add_argument('name',type=str,required=True,help="resource_name cannot be  blank!")
+        parser.add_argument('day',type=str,required=True,help="date cannot be left blank!")
+        parser.add_argument('reservation_time',type=str,required=True,help="reservation_time  cannot be  blank!")
+        parser.add_argument('booking_time',type=str,required=True,help="booking_time  cannot be  blank!")
+        parser.add_argument('return_time',type=str)
+        data=parser.parse_args()
+        res=query(f"""select fine from students where id='{data["id"]}';""",return_json=False)
+        if(len(res)==0):
+            return {"message":"You can't book the resource until your due is cleared"},400
+        log=query(f"""select resource_id,resources_available from resources where resource_name='{data["name"]}';""",return_json=False)
+        if(len(log)!=0 and log[0]['resources_available']>0):
+            if(data['return_time']!=None):
+                #try:
+                query(f"""INSERT INTO booking
+                                    VALUES('{data['id']}',CAST({log[0]['resource_id']} as UNSIGNED),date_format('{data['day']}',"%Y-%m-%d"),
+                                        time_format('{data['reservation_time']}',"%T"),time_format('{data['booking_time']}',"%T"),
+                                        time_format('{data['return_time']}',"%T"),CAST(0 as UNSIGNED))""")
+                return {"message": "User created successfully."}, 201
+
+                #except:
+                    #return {"message": "An error occurred while registering."}, 500
+            else:
+                #try:
+                query(f"""INSERT INTO booking(user_id,r_id,day,reservation_time,booking_time,status)
+                                    VALUES('{data['id']}',CAST({log[0]['resource_id']} as UNSIGNED),date_format('{data['day']}',"%Y-%m-%d"),
+                                        time_format('{data['reservation_time']}',"%T"),time_format('{data['booking_time']}',"%T"),CAST(0 as UNSIGNED))""")
+
+                return {"message": "User created successfully."}, 201
+                #except:
+                    #return {"message": "An error occurred while registering."}, 500
+        else:
+            return {"message": "Resource is not available now,try to book after some time."}, 400'''
 
 
 

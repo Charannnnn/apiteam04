@@ -24,5 +24,22 @@ class User_Bookings_log(Resource):
         except:
             return {"message": "There was an error connecting to bookings table"}, 500
 
+class UserBookingFine(Resource):
+    @jwt_required
+    def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
+        data= parser.parse_args()
+        result=[]
+        try:
+            log = query(f"""select fine from students where id={data["id"]} and fine>0 """,return_json=False)
+            if(len(log)==0):
+                return {"message":"No Due"},200
+            else:
+                log1= query(f""" select * from bookingHistory where user_id={data["id"]} """,return_json=False)
+                result.append(log1[-1])
+                return jsonify(result)
+        except:
+            return {"message": "There was an error connecting to students table"}, 500
 
 
