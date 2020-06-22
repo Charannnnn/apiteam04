@@ -9,11 +9,11 @@ Link:https://sport-resources-booking-api.herokuapp.com/<br>
 Everyone can access these endpoints:<br>
 a)/register-POST to the users table<br><br>
 b) /login-takes a JSON object with 'username' and 'password' and gives back JWT token if exists in Users table. The JWT shall be used to access all the end points. For all the endpoints an Authorization Header should be included with value 'Bearer '.<br>
-
-
+![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%202020-06-22%20at%2012.30.28%20PM.png)<br>
 The/adminLogin endpoint is only meant for the admins and momentarily there is one admin in the admin table who can make changes in the respective tables. This table also takes a JSON object with 'username' and 'password' and gives back JWT token if exists in Admin table. The JWT shall be used to access all the end points. For all the endpoints an Authorization Header should be included with value 'Bearer '.<br><br>
-
-/ResourcesPresent- GET request from the resource table to give details of  all the resources present .<br><br>
+![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%202020-06-22%20at%2012.27.45%20PM.png)<br>
+/ResourcesPresent- GET request from the resource table to give details of  all the resources present .<br>
+![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%202020-06-22%20at%2012.35.34%20PM.png)<br>
 /AddExtraResource- The admin can only make changes after providing the access token. Updates the resources table and inserts a resource when a new resource is bought by the administration.<br><br>
 /DeleteResource-  The admin can only make changes after providing the access token. Updates the resources table and  deletes the resource specified by id .<br><br>
 /userBookingslog - It provides the details of the booking ehich is not yet returned by the user or which is currently booked by the user<br><br>
