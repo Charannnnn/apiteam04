@@ -30,6 +30,7 @@ The/adminLogin endpoint is only meant for the admins and momentarily there is on
 /bookingHistory-GET request to obtain the log of all bookings made from the BookingHistory1 view.<br><br>
 /issuedBookings-GET request to obtain the log of all bookings made on the current day from the BookingHistory1 view.<br><br>
 /blockedUsers- GET request to receive the users who have been blocked so as to not issue any more resources<br><br>
+![](
 /unblockUser-GET request updating the database to obtain the status of the user and to change the status of due of the user when a user pays their dues. <br><br>
 /blockUser-GET request to update the fine next to the id of a user using the id.<br><br>
 /bookResource-<br><br>
@@ -37,6 +38,7 @@ The/adminLogin endpoint is only meant for the admins and momentarily there is on
 /returnedHistory-GET request to obtain the log of all the users who returned booked resources for today from the BookingHistory2 view.<br><br>
 ![](https://github.com/AnnanyaV/apiteam04/blob/master/resources/images/Screenshot%20(227).png)
 /notreturnedHistory'- GET request to obtain the log of all the users who hadn't returned booked resources till that time from the BookingHistory2 view.<br><br>
+![](
 /allBookings-GET request to receive all the bookings from the view BookingHistory1.<br><br>
 
 
