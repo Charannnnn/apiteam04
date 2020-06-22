@@ -1,16 +1,18 @@
 from flask import Flask,jsonify
 import pymysql
-from flask_restful import Api
-import logging
+from flask_restful import Api,Resource 
+from flask_cors import CORS,cross_origin
 from flask_jwt_extended import JWTManager
 from resources.user import *
-from resources.user_cancel import cancelBooking
+from resources.user_cancel import *
 from resources.admin import *
 from resources.user_booking import *
 from resources.resource import *
 from resources.booking_log import *
 
 app= Flask(__name__)
+api=Api(app)
+CORS(app,allow_headers=["Content-Type","Authorization","Access-Control-Allow-Credentials"],supports_credentials=True)
 app.config['PROPAGATE_EXCEPTIONS']=True
 app.config['PREFERRED_URL_SCHEME']='https'
 app.config['JWT_SECRET_KEY']='sportsresourceapikey'
@@ -30,6 +32,7 @@ def invalid_token_callback(error):
         'error': 'invalid_token',
         'message': 'Signature verification failed.'
     }), 401
+
 
 
 api.add_resource(Users,'/users')
@@ -55,6 +58,13 @@ api.add_resource(blockedUsers,'/blockedUsers')
 api.add_resource(unblockUser,'/unblockUser')
 api.add_resource(blockUser,'/blockUser')
 api.add_resource(bookResource,'/bookResource')
+api.add_resource(bookingRequests,'/bookingRequests')
+api.add_resource(rejectBooking,'/rejectBooking')
+api.add_resource(check,'/check')
+api.add_resource(returnedHistory,'/returnedHistory')
+api.add_resource(notreturnedHistory,'/notreturnedHistory')
+api.add_resource(allBookings,'/allBookings')
+
 
 @app.route('/')
 def home():

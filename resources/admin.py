@@ -11,18 +11,18 @@ class Admin(Resource):
     
     @classmethod
     def getAdminById(cls,id):
-        result=query(f"""SELECT id,name,password FROM admin WHERE admin_id={id}""",return_json=False)
+        result=query(f"""SELECT admin_id,name,password FROM admin WHERE admin_id={id}""",return_json=False)
         if len(result)>0: return Admin(result[0]['admin_id'],result[0]['name'],result[0]['password'])
         return None
 
 
 class AdminLogin(Resource):
-    parser=reqparse.RequestParser()
-    parser.add_argument('id',type=int,required=True,help="ID cannot be blank.")
-    parser.add_argument('name',type=str,required=True,help="Name cannot be blank.")
-    parser.add_argument('password',type=str,required=True,help="Password cannot be blank.")
     def post(self):
-        data=self.parser.parse_args()
+        parser=reqparse.RequestParser()
+        parser.add_argument('id',type=int,required=True,help="ID cannot be blank.")
+        parser.add_argument('name',type=str,required=True,help="Name cannot be blank.")
+        parser.add_argument('password',type=str,required=True,help="Password cannot be blank.")
+        data=parser.parse_args()
         admin=Admin.getAdminById(data['id'])
         if admin and safe_str_cmp(admin.password,data['password']) and safe_str_cmp(admin.name, data['name']):
             access_token=create_access_token(identity=admin.id,expires_delta=False)
