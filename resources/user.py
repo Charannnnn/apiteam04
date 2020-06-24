@@ -78,7 +78,8 @@ class bookResource(Resource):
         d=len(result)
         if(len(log)!=0 and len(log1)==0 and c==1 and d==0 and log[0]['resources_available']>0):
             try:
-                query(f"""INSERT INTO booking(user_id,r_id,day,reservation_time,status) VALUES('{data['id']}',CAST({log[0]['resource_id']} as UNSIGNED),date_format('{data['day']}',"%Y-%m-%d"),time_format('{data['reservation_time']}',"%T"),0);""")
+                query(f"""INSERT INTO booking(user_id,r_id,day,reservation_time,status) 
+                        VALUES('{data['id']}',CAST({log[0]['resource_id']} as UNSIGNED),date_format('{data['day']}',"%Y-%m-%d"),time_format('{data['reservation_time']}',"%T"),0);""")
 
                 return {"message": "Booking is successful."}, 201
             except:

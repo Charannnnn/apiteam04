@@ -62,7 +62,7 @@ api.add_resource(allBookings,'/allBookings')
 api.add_resource(AddExtraResource, '/AddExtraResource')
 api.add_resource(DeleteResource, '/DeleteResource')
 #api.add_resource(check,'/check')
-#api.add_resource(Users,'/users')
+#api.add_resource(Users,'/users')s
 
 
 @app.route('/')

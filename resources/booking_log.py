@@ -24,6 +24,9 @@ class issuedBookings(Resource):
 class blockedUsers(Resource):
     @jwt_required
     def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('search', type=str)
+        data= parser.parse_args()
         try:
             return query(f"""select
                             s.name,b.user_id,b.r_id,date_format(b.day,"%Y-%m-%d") as day,time_format(b.reservation_time,"%T") as reservation_time,
@@ -33,7 +36,7 @@ class blockedUsers(Resource):
                             r.resource_name as resource_name,
                             b.status,s.fine
                             from students s,booking b,resources r
-                            where s.fine>0 and b.r_id=r.resource_id and b.user_id=s.id and b.day =(select max(day) from booking b1 where b1.user_id=b.user_id)
+                            where s.fine>0 and b.r_id=r.resource_id and b.user_id=s.id and b.day =(select max(day) from booking b1 where b1.user_id=b.user_id) and (b.user_id like "%{data['search']}%" or lower(r.resource_name) like "%{data['search']}%")
                             order by b.day;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
@@ -71,13 +74,22 @@ class blockUser(Resource):
 class bookingRequests(Resource):
     @jwt_required
     def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('search', type=str)
+        data= parser.parse_args()
         now = datetime.now()
         now=now+timedelta(hours=5,minutes=30)
         current_time = now.strftime("%H:%M:%S")
         current_time=str(current_time)
         try:
             query(f"""UPDATE booking set status=CAST(2 AS UNSIGNED) where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 and time_to_sec(timediff('{current_time}',reservation_time))/60 >20;""")
-            return query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0;""")
+
+            res = query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""",return_json=False)
+            if(len(res)!=0):
+                return query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""")
+            else:
+                return {"message":"no results found !"},200
+
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
 
@@ -85,14 +97,24 @@ class returnedHistory(Resource):
     @jwt_required
     def get(self):
         try:
-            return query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and return_day is not Null and status=1  ;""")
+            return query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and return_day is not Null and status=1;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
 
 class notreturnedHistory(Resource):
     @jwt_required
     def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('search', type=str)
+        data= parser.parse_args()
         try:
-            return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 ;""")
+            if data['search']!=None:
+                res = query(f"""Select * from bookingHistory2 where return_day is Null and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""",return_json=False)
+                if(len(res)==0):
+                    return {"message":"No data found !"},200
+                else:
+                    return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""")
+            else:
+                return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 ;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
