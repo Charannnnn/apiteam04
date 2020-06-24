@@ -47,6 +47,27 @@ class UserLogin(Resource):
             return {'access_token':access_token},200
         return {"message":"Invalid Credentials!"}, 401
 
+class changePassword(Resource):
+    @jwt_required
+    def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
+        parser.add_argument('password',type=str,required=True,help="Password cannot be blank.")
+        parser.add_argument('new_password',type=str,required=True,help="new Password cannot be blank.")
+        data= parser.parse_args()
+        try:
+            res = query(f"""Select * from students where id='{data["id"]}' """,return_json=False)
+            if(res[0]['password']==data['password']):
+                if(res[0]['password']!=data['new_password']):
+                    query(f""" update students set password='{data['new_password']}' where id='{data['id']}';""")
+                    return {"message":"password changed !"},200
+                else:
+                    return {"message":"old password and new are same,cannot update !"},200
+            else:
+                return {"message":"enter the correct password"},401
+        except:
+            return {"message": "There was an error connecting to user table"}, 400
+
 class Users(Resource):
     @jwt_required
     def get(self):
