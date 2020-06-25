@@ -87,8 +87,8 @@ class bookingRequests(Resource):
             res = query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""",return_json=False)
             if(len(res)!=0):
                 return query(f"""Select * from bookingHistory2 where date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status =0 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""")
-            else:
-                return {"message":"no results found !"},200
+            #else:
+                #return {"message":"no results found !"},200
 
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
