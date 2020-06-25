@@ -2,7 +2,7 @@ from flask_restful import Resource,reqparse
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
 from db import query
-
+from flask import jsonify
 
 class User():
     def __init__(self,id,name,batch,password):
@@ -75,7 +75,13 @@ class Users(Resource):
         parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
         data= parser.parse_args()
         try:
-            return query(f"""Select * from students where id={data["id"]}""")
+            res = query(f"""Select * from students where id={data["id"]}""",return_json=False)
+            if(len(res)!=0):
+                return jsonify({"id": res[0]['id'],
+                                "name":res[0]['name'],
+                                "branch":res[0]['branch'],
+                                "password":res[0]['password'],
+                                "fine":res[0]['fine']})
         except:
             return {"message": "There was an error connecting to user table"}, 200
 
