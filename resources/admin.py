@@ -28,9 +28,7 @@ class AdminLogin(Resource):
             access_token=create_access_token(identity=admin.id,expires_delta=False)
             return {'access_token':access_token}
         else:
-            return {'access_token':"Invalid Credentials"}
-        
-
+            return {'access_token':access_token}
 
 class resource_(Resource):
     def __init__(self, id, name, count, resources_available):
