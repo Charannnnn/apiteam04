@@ -22,6 +22,7 @@ class UserRegister(Resource):
         parser=reqparse.RequestParser()
         parser.add_argument('id',type=str,required=True,help="ID cannot be  blank!")
         parser.add_argument('name',type=str,required=True,help="username cannot be  blank!")
+        parser.add_argument('mail_id',type=str,required=True,help="mail_id cannot be left blank!")
         parser.add_argument('branch',type=str,required=True,help="branch cannot be left blank!")
         parser.add_argument('password',type=str,required=True,help="Password cannot be  blank!")
         data=parser.parse_args()
@@ -29,7 +30,7 @@ class UserRegister(Resource):
             return {"message": "A user with that id already exists"}, 400
         try:
             query(f"""INSERT INTO students(id,name,branch,password)
-                                  VALUES('{data['id']}','{data['name']}','{data['branch']}','{data['password']}')""")
+                                  VALUES('{data['id']}','{data['name']}','{data['mail_id']}','{data['branch']}','{data['password']}')""")
         except:
             return {"message": "An error occurred while registering."}, 500
         return {"message": "User created successfully."}, 201

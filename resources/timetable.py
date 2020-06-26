@@ -14,6 +14,8 @@ class timetable(Resource):
         parser.add_argument('year', type=int, required=True, help='year Cannot be blank')
         parser.add_argument('section', type=int, required=True, help='section Cannot be blank')
         data= parser.parse_args()
+        data['year']=int(data['year'])
+        data['section']=int(data['section'])
         section='section'+str(data['section'])
         try:
             if(data['section']>=1 and data['section']<=3):
