@@ -27,7 +27,7 @@ class AdminLogin(Resource):
         if admin and safe_str_cmp(admin.password,data['password']) and safe_str_cmp(admin.name, data['name']):
             access_token=create_access_token(identity=admin.id,expires_delta=False)
             return {'access_token':access_token},200
-        return {"message":"Invalid Credentials!"}, 401
+        return {'access_token':access_token},200
 
 class resource_(Resource):
     def __init__(self, id, name, count, resources_available):
@@ -42,9 +42,6 @@ class resource_(Resource):
         if len(result)>0: 
             return resource_(result[0]['resource_id'],result[0]['resource_name'],result[0]['count'],result[0]['resources_available'])
         return None
-
-
-
 
 
 class Resourcespresent(Resource):
