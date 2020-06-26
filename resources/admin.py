@@ -27,7 +27,7 @@ class AdminLogin(Resource):
         if admin and safe_str_cmp(admin.password,data['password']) and safe_str_cmp(admin.name, data['name']):
             access_token=create_access_token(identity=admin.id,expires_delta=False)
 
-            return {'access_token':access_token},
+            return {'access_token':access_token}
         else:
             access_token=create_access_token(identity=admin.id,expires_delta=False)
             return {'access_token':"Invalid Credentials"}
