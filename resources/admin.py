@@ -27,7 +27,7 @@ class AdminLogin(Resource):
         if admin and safe_str_cmp(admin.password,data['password']) and safe_str_cmp(admin.name, data['name']):
             access_token=create_access_token(identity=admin.id,expires_delta=False)
             return {'access_token':access_token},200
-        return {"message":"Invalid Credentials!"}, 401
+        return {"access_token":"Invalid Credentials!"}, 401
 
 class resource_(Resource):
     def __init__(self, id, name, count, resources_available):
