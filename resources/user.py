@@ -70,7 +70,7 @@ class changePassword(Resource):
 
 class Users(Resource):
     @jwt_required
-    def get(self):
+    def post(self):
         parser=reqparse.RequestParser()
         parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
         data= parser.parse_args()
@@ -83,7 +83,7 @@ class Users(Resource):
                                 "password":res[0]['password'],
                                 "fine":res[0]['fine']})
         except:
-            return {"message": "There was an error connecting to user table"}, 200
+            return {"message": "There was an error connecting to user table"}, 500
 
 class bookResource(Resource):
     @jwt_required
