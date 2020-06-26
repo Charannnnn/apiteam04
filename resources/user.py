@@ -49,7 +49,7 @@ class UserLogin(Resource):
 
 class changePassword(Resource):
     @jwt_required
-    def get(self):
+    def post(self):
         parser=reqparse.RequestParser()
         parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
         parser.add_argument('password',type=str,required=True,help="Password cannot be blank.")
