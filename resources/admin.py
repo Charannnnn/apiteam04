@@ -30,7 +30,7 @@ class AdminLogin(Resource):
             return {'access_token':access_token}
         else:
             access_token=create_access_token(identity=admin.id,expires_delta=False)
-            return {'access_token':"Invalid Credentials"}
+            return {'access_token':access_token}
         
 
 
