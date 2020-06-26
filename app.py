@@ -9,6 +9,7 @@ from resources.admin import *
 from resources.user_booking import *
 from resources.resource import *
 from resources.booking_log import *
+from resources.timetable import *
 
 app= Flask(__name__)
 api=Api(app)
@@ -64,6 +65,7 @@ api.add_resource(DeleteResource, '/DeleteResource')
 api.add_resource(check,'/check')
 api.add_resource(Users,'/users')
 api.add_resource(changePassword,'/changePassword')
+api.add_resource(timetable,'/timetable')
 
 
 @app.route('/')
