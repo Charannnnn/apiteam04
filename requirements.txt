@@ -5,3 +5,5 @@ pymysql
 gunicorn
 flask_cors
 waitress
+flask_mail
+itsdangerous

@@ -2,7 +2,7 @@ from flask_restful import Resource,reqparse
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
 from db import query
-from flask import jsonify
+from flask import jsonify,url_for,request
 
 class User():
     def __init__(self,id,name,batch,password):
@@ -113,3 +113,22 @@ class bookResource(Resource):
                 return {"message": "An error occurred while booking."}, 400
         else:
             return {"message": "Resource is not available for you now,try to book after some time or return the issued resources."}, 400
+
+'''class forgot_password():
+    def post(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('id',type=str,required=True,help="id  cannot be  blank!")
+        data=parser.parse_args()
+        res=query(f"""select email from students where id='{data["id"]}';""",return_json=False)
+        email =res[0]['email']
+        token = s.dumps(email, salt='email-confirm')
+
+        msg = Message('Confirm Email', sender='sportsresources.cbit@gmail.com', recipients=[email])
+
+        link = url_for('confirm_email', token=token, _external=True)
+
+        msg.body = 'Your link is {}'.format(link)
+
+        mail.send(msg)
+
+        return {"message":"mail has been sent to reset password"},200'''

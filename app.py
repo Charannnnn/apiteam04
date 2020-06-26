@@ -1,8 +1,11 @@
-from flask import Flask,jsonify
+from flask import Flask,jsonify,url_for,request
 import pymysql
 from flask_restful import Api,Resource 
 from flask_cors import CORS,cross_origin
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from db import query
 from resources.user import *
 from resources.user_cancel import *
 from resources.admin import *
@@ -19,6 +22,9 @@ app.config['PREFERRED_URL_SCHEME']='https'
 app.config['JWT_SECRET_KEY']='sportsresourceapikey'
 api= Api(app)
 jwt = JWTManager(app)
+app.config.from_pyfile('config.cfg')
+mail = Mail(app)
+s = URLSafeTimedSerializer('Thisisasecretkey!')
 
 @jwt.unauthorized_loader
 def missing_token_callback(error):
@@ -67,9 +73,71 @@ api.add_resource(Users,'/users')
 api.add_resource(changePassword,'/changePassword')
 api.add_resource(timetable,'/timetable')
 
-
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    return('Hello')
+    if request.method == 'GET':
+        return '<form action="/" method="POST"><input name="email"><input type="submit"></form>'
+
+    email = request.form['email']
+    token = s.dumps(email, salt='email-confirm')
+
+    msg = Message('Confirm Email', sender='sportsresources.cbit@gmail.com', recipients=[email])
+
+    link = url_for('confirm_email', token=token, _external=True)
+
+    msg.body = 'Your link is {}'.format(link)
+
+    mail.send(msg)
+
+    return '<h1>The email you entered is {}. The token is {}</h1>'.format(email, token)
+
+def forgot_password():
+        parser=reqparse.RequestParser()
+        parser.add_argument('id',type=str,required=True,help="id  cannot be  blank!")
+        data=parser.parse_args()
+        res=query(f"""select email from students where id='{data["id"]}';""",return_json=False)
+        email =res[0]['email']
+        global id 
+        id=data["id"]
+        token = s.dumps(email, salt='email-confirm')
+
+        msg = Message('Confirm Email', sender='sportsresources.cbit@gmail.com', recipients=[email])
+
+        link = url_for('confirm_email', token=token, _external=True)
+
+        msg.body = 'Your link is {}'.format(link)
+
+        mail.send(msg)
+
+        return {"message":"mail has been sent to reset password"},200
+
+@app.route('/confirm_email/<token>',methods=['GET', 'POST'])
+def confirm_email(token):
+    try:
+        if request.method == 'GET':
+            email = s.loads(token, salt='email-confirm', max_age=3600)
+            return '<h1>Change Password!</h1><form action="/confirm_email/{token}" method="POST"><input type="password" name="password"><input type="password" name="confirm_password"><input type="submit"></form>'
+        if request.method == 'POST':
+            p1=request.form['password']
+            p2=request.form['confirm_password']
+            if(p1==p2):
+                query(f""" update students set password='{p1}' where id='{id}' """)
+                return '<h1>Updated Password !</h1>'
+            else:
+                return '<h1>Password is not updated</h1>'
+    except SignatureExpired:
+        return '<h1>The token is expired!</h1>'
+
+
+@app.route('/update_password')
+def update_password():
+    p1=request.form['password']
+    p2=request.form['confirm_password']
+    if(p1==p2):
+        query(f""" update students set password={p1} where id={id} """)
+        return '<h1>Updated Password</h1>'
+    else:
+        return '<h1>Password is nor updated</h1>'
+
 if __name__=='__main__':
     app.run(port="5000",debug=True)
