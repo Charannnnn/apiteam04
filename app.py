@@ -91,7 +91,7 @@ def home():
 
     return '<h1>The email you entered is {}. The token is {}</h1>'.format(email, token)
 
-@app.route('/forgot_password', methods=['POST'])
+@app.route('/forgot_password', methods=['GET'])
 def forgot_password():
         parser=reqparse.RequestParser()
         parser.add_argument('id',type=str,required=True,help="id  cannot be  blank!")
