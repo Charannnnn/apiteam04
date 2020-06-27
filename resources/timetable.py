@@ -17,8 +17,4 @@ class timetable(Resource):
         data['year']=int(data['year'])
         data['section']=int(data['section'])
         section='section'+str(data['section'])
-        try:
-            if(data['section']>=1 and data['section']<=3):
-                return query(f"""Select {section} as time_table from timetable where branch=lower('{data['branch']}') and year={data['year']} """)
-        except:
-            return {"message": "There was an error connecting to resources table"}, 500
+        return query(f"""Select {section} as time_table from timetable where branch=lower('{data['branch']}') and year={data['year']} """)
