@@ -117,7 +117,7 @@ def confirm_email(token):
     try:
         if request.method == 'GET':
             email = s.loads(token, salt='email-confirm', max_age=3600)
-            return '<h1>Change Password!</h1><form action="/confirm_email/{token}" method="POST"><input type="password" name="password"><input type="password" name="confirm_password"><input type="submit"></form>'
+            return '<h1>Change Password!</h1><form action="/confirm_email/{{token}}" method="POST"><input type="password" name="password"><input type="password" name="confirm_password"><input type="submit"></form>'
         if request.method == 'POST':
             p1=request.form['password']
             p2=request.form['confirm_password']
@@ -138,7 +138,7 @@ def update_password():
         query(f""" update students set password={p1} where id={id} """)
         return '<h1>Updated Password</h1>'
     else:
-        return '<h1>Password is nor updated</h1>'
+        return '<h1>Password is not updated</h1>'
 
 if __name__=='__main__':
     app.run(port="5000",debug=True)
