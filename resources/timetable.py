@@ -17,4 +17,7 @@ class timetable(Resource):
         data['year']=int(data['year'])
         data['section']=int(data['section'])
         section='section'+str(data['section'])
-        return query(f"""Select {section} as time_table from timetable where branch=lower('{data['branch']}') and year={data['year']} and {section} is not Null""")
+        try:
+            return query(f"""Select {section} as time_table from timetable where branch=lower('{data['branch']}') and year={data['year']} and {section} is not Null""")
+        except:
+            return
