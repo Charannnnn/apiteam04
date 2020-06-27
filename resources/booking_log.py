@@ -110,9 +110,7 @@ class notreturnedHistory(Resource):
         try:
             if data['search']!=None:
                 res = query(f"""Select * from bookingHistory2 where return_day is Null and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""",return_json=False)
-                if(len(res)==0):
-                    return {"message":"No data found !"},200
-                else:
+                if(len(res)!=0):
                     return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""")
             else:
                 return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 ;""")
