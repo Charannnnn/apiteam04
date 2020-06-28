@@ -93,12 +93,15 @@ def home():
 
 @app.route('/forgot_password', methods=['GET'])
 def forgot_password():
-        parser=reqparse.RequestParser()
-        parser.add_argument('id',type=str,required=True,help="id  cannot be  blank!")
-        data=parser.parse_args()
-        res=query(f"""select email from students where id='{data["id"]}';""",return_json=False)
-        email =res[0]['email']
-        global id 
+    global id
+    parser=reqparse.RequestParser()
+    parser.add_argument('id',type=str,required=True,help="id  cannot be  blank!")
+    data=parser.parse_args()
+    admin_id=int(data['id'])
+    res1=query(f"""select email from students where id='{data["id"]}';""",return_json=False)
+    res2=query(f"""select email from admin where admin_id={admin_id};""",return_json=False)
+    if(len(res1)!=0):
+        email =res1[0]['email']
         id=data["id"]
         token = s.dumps(email, salt='email-confirm')
 
@@ -111,19 +114,38 @@ def forgot_password():
         mail.send(msg)
 
         return {"message":"mail has been sent to reset password"},200
+    elif(len(res2)!=0):
+        email =res2[0]['email']
+        id=admin_id
+        token = s.dumps(email, salt='email-confirm')
+
+        msg = Message('Confirm Email', sender='sportsresources.cbit@gmail.com', recipients=[email])
+
+        link = url_for('confirm_email', token=token, _external=True)
+
+        msg.body = 'Your link is {}'.format(link)
+
+        mail.send(msg)
+
+        return {"message":"mail has been sent to reset password"},200
+
 
 @app.route('/confirm_email/<token>',methods=['GET', 'POST'])
 def confirm_email(token):
     try:
         if request.method == 'GET':
             email = s.loads(token, salt='email-confirm', max_age=3600)
-            return '<h1>Change Password!</h1><form action="/confirm_email/{{token}}" method="POST"><input type="password" name="password"><input type="password" name="confirm_password"><input type="submit"></form>'
+            return '<center><h1 style="color:blue">SPORTS RESOURCES BOOKING APPLICATION</h1><br><br><h1 style="font-family:verdana">Change Password!</h1><br><br><form action="/confirm_email/<token>" method="POST"><input type="password" placeholder="password" name="password" required class="form-control my-2"><br><br><input type="password" placeholder="confirm_password" name="confirm_password" required class="form-control my-2"><br><br><input class="btn col-6 text-black font-weight-bold" type="submit"style="background-color:  #2bb321; font-size: 18px;"></center></form>'
         if request.method == 'POST':
             p1=request.form['password']
             p2=request.form['confirm_password']
-            if(p1==p2):
+            if(p1==p2 and type(id)==str):
                 query(f""" update students set password='{p1}' where id='{id}' """)
                 return '<h1>Updated Password !</h1>'
+            elif(p1==p2 and type(id)==int):
+                query(f""" update admin set password='{p1}' where admin_id={id} """)
+                return '<h1>Updated Password !</h1>'
+            
             else:
                 return '<h1>Password is not updated</h1>'
     except SignatureExpired:
