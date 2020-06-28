@@ -76,37 +76,35 @@ class issueResource(Resource):
         #parser.add_argument('booking_time', type=str, required=True, help='booking_time Cannot be blank')
         data= parser.parse_args()
         now = datetime.now()
-        #now=now+timedelta(hours=5,minutes=30)
+        now=now+timedelta(hours=5,minutes=30)
         current_time = now.strftime("%H:%M:%S")
         print(current_time)
         data["booking_time"]=str(current_time)
-        #try:
-        result=query(f"""select * from bookingHistory1 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=CAST(0 AS UNSIGNED) """,return_json=False)
-        log=query(f"""Select fine from students where id='{data["id"]}';""",return_json=False)
-        if(log[0]['fine']>0):
-            return {"message":"please clear the due"},200
-        query(f"""UPDATE booking  SET status=2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
-        ##query(f"""UPDATE booking  SET status=1,booking_time=time_format('{data["booking_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1 """)
-        ##except:
-            ##query(f"""UPDATE booking  SET status=status+2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
-            ##return {"message":"cancel your booking and try again"},200
-        if(len(result)!=0):
-            data["resc_id"]=result[0]['r_id']
-            res1=query(f"""select * from resources  where resource_id={data["resc_id"]}""",return_json=False)
-            if(res1[0]['resource_id']>0):
-                query(f"""UPDATE resources  SET resources_available=resources_available-1 where resource_id={data["resc_id"]} and resources_available>0 """)
-                ##query(f"""UPDATE booking  SET status= CAST(1 AS UNSIGNED),booking_time=time_format('{data["booking_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
-                ##return {"message": "updated available resources"}, 200
-            else:
-                return {"message": "Sorry there are no available resources"}, 200
-            query(f"""UPDATE booking  SET status=CAST(1 AS UNSIGNED),booking_time=time_format('{data["booking_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1 and reservation_time=(select max(reservation_time) from booking where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d")) """)
-            return {"message": "updated available resources"}, 200
+        try:
+            result=query(f"""select * from bookingHistory1 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=CAST(0 AS UNSIGNED) """,return_json=False)
+            log=query(f"""Select fine from students where id='{data["id"]}';""",return_json=False)
+            if(log[0]['fine']>0):
+                return {"message":"please clear the due"},200
+            query(f"""UPDATE booking  SET status=2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
+            ##query(f"""UPDATE booking  SET status=1,booking_time=time_format('{data["booking_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1 """)
+            ##except:
+                ##query(f"""UPDATE booking  SET status=status+2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
+                ##return {"message":"cancel your booking and try again"},200
+            if(len(result)!=0):
+                data["resc_id"]=result[0]['r_id']
+                res1=query(f"""select * from resources  where resource_id={data["resc_id"]}""",return_json=False)
+                if(res1[0]['resource_id']>0):
+                    query(f"""UPDATE resources  SET resources_available=resources_available-1 where resource_id={data["resc_id"]} and resources_available>0 """)
+                    query(f"""UPDATE booking  SET status=CAST(1 AS UNSIGNED),booking_time=time_format('{data["booking_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1 and  reservation_time='{result[0]['reservation_time']}' """)
+                    return {"message": "updated available resources"}, 200
+                else:
+                    return {"message": "Sorry there are no available resources"}, 200
 
-        else:
-            return {"message":"You didn't book any  resource"},404
-        #except:
-            ##query(f"""UPDATE booking  SET status=status+2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
-            #return {"message": "There was an error connecting to booking table"}, 500
+            else:
+                return {"message":"You didn't book any  resource"},404
+        except:
+            query(f"""UPDATE booking  SET status=status+2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
+            return {"message": "There was an error connecting to booking table"}, 500
 
 class acceptReturnedResource(Resource):
     @jwt_required
