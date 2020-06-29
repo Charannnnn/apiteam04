@@ -84,3 +84,24 @@ class DeleteResource(Resource):
                 return {"message": "Coudn't delete resource because it doesn't exist"}, 401
         except:
             return {"message": "Coudnt delete resource"}, 500
+
+class admin_change_password(Resource):
+    @jwt_required
+    def post(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('id', type=int, required=True, help='user_id Cannot be blank')
+        parser.add_argument('password',type=str,required=True,help="Password cannot be blank.")
+        parser.add_argument('new_password',type=str,required=True,help="new Password cannot be blank.")
+        data= parser.parse_args()
+        try:
+            res = query(f"""Select * from admin where id={data["id"]} """,return_json=False)
+            if(res[0]['password']==data['password']):
+                if(res[0]['password']!=data['new_password']):
+                    query(f""" update admin set password='{data['new_password']}' where id={data['id']};""")
+                    return {"message":"password changed !"},200
+                else:
+                    return {"message":"old password and new are same,cannot update !"},200
+            else:
+                return {"message":"enter the correct password"},401
+        except:
+            return {"message": "There was an error connecting to user table"}, 400
