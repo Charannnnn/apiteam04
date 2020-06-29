@@ -72,6 +72,7 @@ api.add_resource(check,'/check')
 api.add_resource(Users,'/users')
 api.add_resource(changePassword,'/changePassword')
 api.add_resource(timetable,'/timetable')
+api.add_resource(admin_change_password,'/admin_change_password')
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
