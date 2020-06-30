@@ -94,14 +94,14 @@ class admin_change_password(Resource):
         parser.add_argument('new_password',type=str,required=True,help="new Password cannot be blank.")
         data= parser.parse_args()
         try:
-            res = query(f"""Select * from admin where id={data["id"]} """,return_json=False)
+            res = query(f"""Select * from admin where admin_id={data["id"]} """,return_json=False)
             if(res[0]['password']==data['password']):
                 if(res[0]['password']!=data['new_password']):
-                    query(f""" update admin set password='{data['new_password']}' where id={data['id']};""")
+                    query(f""" update admin set password='{data['new_password']}' where admin_id={data['id']};""")
                     return {"message":"password changed !"},200
                 else:
                     return {"message":"old password and new are same,cannot update !"},200
             else:
-                return {"message":"enter the correct password"},401
+                return {"message":"enter the correct password"},200
         except:
-            return {"message": "There was an error connecting to user table"}, 400
+            return {"message": "There was an error connecting to admin table"}, 400
