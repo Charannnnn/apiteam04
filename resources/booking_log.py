@@ -112,9 +112,9 @@ class notreturnedHistory(Resource):
             if data['search']!=None:
                 res = query(f"""Select * from bookingHistory2 where return_day is Null and date_format(day,"%Y-%m-%d")<>curdate()  and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""",return_json=False)
                 if(len(res)!=0):
-                    return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""")
+                    return query(f"""Select * from bookingHistory2 where return_day is Null and date_format(day,"%Y-%m-%d")<>curdate() and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""")
             else:
-                return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 ;""")
+                return query(f"""Select * from bookingHistory2 where return_day is Null  and date_format(day,"%Y-%m-%d")<>curdate() and status =1 ;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
 
@@ -128,8 +128,8 @@ class notreturnedToday(Resource):
             if data['search']!=None:
                 res = query(f"""Select * from bookingHistory2 where return_day is Null and date_format(day,"%Y-%m-%d")=curdate()  and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""",return_json=False)
                 if(len(res)!=0):
-                    return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""")
+                    return query(f"""Select * from bookingHistory2 where return_day is Null and date_format(day,"%Y-%m-%d")=curdate() and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""")
             else:
-                return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 ;""")
+                return query(f"""Select * from bookingHistory2 where return_day is Null and date_format(day,"%Y-%m-%d")=curdate() and status =1 ;""")
         except:
             return {"message": "There was an error connecting to the booking table"}, 500
