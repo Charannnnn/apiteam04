@@ -44,6 +44,13 @@ class resource_(Resource):
         if len(result)>0: 
             return resource_(result[0]['resource_id'],result[0]['resource_name'],result[0]['count'],result[0]['resources_available'])
         return None
+    
+    @classmethod
+    def getResourceByName(cls,name):
+        result=query(f"""SELECT * from resources WHERE lower(resource_name)=lower("{name}")""",return_json=False)
+        if len(result)>0: 
+            return resource_(result[0]['resource_id'],result[0]['resource_name'],result[0]['count'],result[0]['resources_available'])
+        return None
 
 
 class Resourcespresent(Resource):
@@ -57,16 +64,16 @@ class Resourcespresent(Resource):
 class AddExtraResource(Resource):
     def post(self):
         parser=reqparse.RequestParser()
-        parser.add_argument('id',type=int,required=True,help="ID cannot be blank.")
+        #parser.add_argument('id',type=int,required=True,help="ID cannot be blank.")
         parser.add_argument('name',type=str,required=True,help="Name cannot be blank.")
         parser.add_argument('count',type=int,required=True,help="Count cannot be blank")
         data=parser.parse_args()
-        res=resource_.getResourceById(data['id'])
+        res=resource_.getResourceByName(data['name'])
         try:
             if res:
                 return {"message": "Coudnt add resource because it already exists"}, 401
             else:
-                query(f"""INSERT into resources values({data["id"]}, '{data["name"]}', CAST({data["count"]} as UNSIGNED) ,CAST({data["count"]} as UNSIGNED))""")
+                query(f"""INSERT into resources(resource_name,count,resources_available) values('{data["name"]}', CAST({data["count"]} as UNSIGNED) ,CAST({data["count"]} as UNSIGNED))""")
         except:
             return {"message": "Coudnt add resource"}, 401
 
