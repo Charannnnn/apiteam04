@@ -61,11 +61,12 @@ class blockUser(Resource):
     def get(self):
         parser=reqparse.RequestParser()
         parser.add_argument('id', type=str, required=True, help='user_id Cannot be blank')
+        parser.add_argument('fine', type=int, required=True, help='Fine Cannot be blank')
         data= parser.parse_args()
         try:
             res=query(f"""select * from students where id={data["id"]};""",return_json=False)
             if(len(res)!=0):
-                query(f""" UPDATE students SET fine=50 where id= {data["id"]} """)
+                query(f""" UPDATE students SET fine=fine+{data["fine"]} where id= {data["id"]} """)
                 return {"message":"Fine amount is now updated"},200
             return {"message": "User doen't Exist"}, 500
         except:
