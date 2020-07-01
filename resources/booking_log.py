@@ -110,7 +110,23 @@ class notreturnedHistory(Resource):
         data= parser.parse_args()
         try:
             if data['search']!=None:
-                res = query(f"""Select * from bookingHistory2 where return_day is Null and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""",return_json=False)
+                res = query(f"""Select * from bookingHistory2 where return_day is Null and date_format(day,"%Y-%m-%d")<>curdate()  and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""",return_json=False)
+                if(len(res)!=0):
+                    return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""")
+            else:
+                return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 ;""")
+        except:
+            return {"message": "There was an error connecting to the booking table"}, 500
+
+class notreturnedToday(Resource):
+    @jwt_required
+    def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('search', type=str)
+        data= parser.parse_args()
+        try:
+            if data['search']!=None:
+                res = query(f"""Select * from bookingHistory2 where return_day is Null and date_format(day,"%Y-%m-%d")=curdate()  and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""",return_json=False)
                 if(len(res)!=0):
                     return query(f"""Select * from bookingHistory2 where return_day is Null and status =1 and (user_id like "%{data['search']}%" or lower(resource_name) like "%{data['search']}%");""")
             else:
