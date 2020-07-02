@@ -76,7 +76,7 @@ class issueResource(Resource):
         #parser.add_argument('booking_time', type=str, required=True, help='booking_time Cannot be blank')
         data= parser.parse_args()
         now = datetime.now()
-        now=now+timedelta(hours=5,minutes=30)
+        now=now+timedelta(hours=0,minutes=5)
         current_time = now.strftime("%H:%M:%S")
         print(current_time)
         data["booking_time"]=str(current_time)
@@ -115,7 +115,7 @@ class acceptReturnedResource(Resource):
         #parser.add_argument('return_day', type=str, required=True, help='return_day Cannot be blank')
         data= parser.parse_args()
         now = datetime.now()
-        now=now+timedelta(hours=5,minutes=30)
+        now=now+timedelta(hours=2,minutes=3)
         current_time = now.strftime("%H:%M:%S")
         today = date.today()
         d1 = today.strftime("%Y-%m-%d")#check r_id - comparision with todays  date,instead take return time to check that and status=1
