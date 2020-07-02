@@ -76,7 +76,6 @@ class issueResource(Resource):
         #parser.add_argument('booking_time', type=str, required=True, help='booking_time Cannot be blank')
         data= parser.parse_args()
         now = datetime.now()
-        now=now+timedelta(hours=0,minutes=5)
         current_time = now.strftime("%H:%M:%S")
         print(current_time)
         data["booking_time"]=str(current_time)
