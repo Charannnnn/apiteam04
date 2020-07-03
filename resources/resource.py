@@ -76,7 +76,7 @@ class issueResource(Resource):
         #parser.add_argument('booking_time', type=str, required=True, help='booking_time Cannot be blank')
         data= parser.parse_args()
         now = datetime.now()
-        now=now-timedelta(hours=1)
+        now=now-timedelta(hours=6,minutes=30)
         current_time = now.strftime("%H:%M:%S")
         data["booking_time"]=str(current_time)
         try:
@@ -84,7 +84,7 @@ class issueResource(Resource):
             log=query(f"""Select fine from students where id='{data["id"]}';""",return_json=False)
             if(log[0]['fine']>0):
                 return {"message":"please clear the due"},200
-            #query(f"""UPDATE booking  SET status=2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
+            query(f"""UPDATE booking  SET status=2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
             ##query(f"""UPDATE booking  SET status=1,booking_time=time_format('{data["booking_time"]}',"%T") where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status<>1 """)
             ##except:
                 ##query(f"""UPDATE booking  SET status=status+2 where user_id='{data["id"]}' and date_format(day,"%Y-%m-%d")=date_format(curdate(),"%Y-%m-%d") and status=0 """)
@@ -114,9 +114,9 @@ class acceptReturnedResource(Resource):
         #parser.add_argument('return_day', type=str, required=True, help='return_day Cannot be blank')
         data= parser.parse_args()
         now = datetime.now()
-        #now=now+timedelta(hours=2,minutes=3)
+        now=now+timedelta(hours=5,minutes=30)
         current_time = now.strftime("%H:%M:%S")
-        print(current_time)
+        #print(current_time)
         today = date.today()
         d1 = today.strftime("%Y-%m-%d")#check r_id - comparision with todays  date,instead take return time to check that and status=1
         data["return_time"]=str(current_time)
